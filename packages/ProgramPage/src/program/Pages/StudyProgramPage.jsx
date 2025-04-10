@@ -3,10 +3,16 @@ import { CreateDelayer, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfronte
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
 import { ProgramLargeCard } from "../Components";
 import { ProgramReadAsyncAction } from "../Queries";
+import {useParams} from "react-router";
 
 const StudyProgramsPage = () => {
     const { error, loading, entities, fetch } = useAsyncAction(ProgramReadAsyncAction);
     const [delayer] = useState(() => CreateDelayer());
+    const { id } = useParams(); // Ensure 'id' is retrieved from the route
+    const queryVariables = { id };
+
+    useAsyncAction(queryVariables);
+
 
     // Fetch data on component mount
     React.useEffect(() => {

@@ -1,6 +1,4 @@
-import {createQueryStrLazy} from "@hrbolek/uoisfrontend-gql-shared"
-import * as querystring from "node:querystring";
-
+import { createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
 
 export const ProgramLinkFragment = createQueryStrLazy(
     `
@@ -8,24 +6,29 @@ fragment ProgramLink on ProgramGQLModel {
   id
   name
 }
-`)
-
+`);
 
 export const ProgramMediumFragment = createQueryStrLazy(
     `
 fragment ProgramMedium on ProgramGQLModel {
   ...ProgramLink
-  
- 
 }
-`, ProgramLinkFragment)
+`, ProgramLinkFragment);
 
 export const ProgramLargeFragment = createQueryStrLazy(
     `
 fragment ProgramLarge on ProgramGQLModel {
   ...ProgramMedium
   name
-  
 }
-`, ProgramMediumFragment)
-  
+`, ProgramMediumFragment);
+
+// New query for fetching multiple programs
+export const ProgramsListQuery = createQueryStrLazy(
+    `
+query ProgramsListQuery {
+  programs {
+    ...ProgramLarge
+  }
+}
+`, ProgramLargeFragment);

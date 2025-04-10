@@ -6,6 +6,7 @@ import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
 import { ProgramLargeCard } from "../Components"
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
+import { ProgramsListQuery } from "../Queries";
 
 /**
  * A page content component for displaying detailed information about an program entity.
@@ -58,30 +59,40 @@ const ProgramPageContent = ({program}) => {
  *
  * <ProgramPageContentLazy program={programId} />
  */
-const ProgramPageContentLazy = ({program}) => {
-    const { error, loading, entity, fetch } = useAsyncAction(ProgramReadAsyncAction, program)
-    const [delayer] = useState(() => CreateDelayer())
+const ProgramPageContentLazy = ({ program }) => {
+    const { error, loading, entity, fetch } = useAsyncAction(
+        program?.id ? ProgramReadAsyncAction : ProgramsListQuery,
+        program?.id ? program : undefined
+    );
+    const [delayer] = useState(() => CreateDelayer());
 
-    const handleChange = async(e) => {
-        // console.log("GroupCategoryPageContentLazy.handleChange.e", e)
-        const data = e.target.value
-        const serverResponse = await delayer(() => fetch(data))
-        // console.log("GroupCategoryPageContentLazy.serverResponse", serverResponse)
-    }
-    const handleBlur = async(e) => {
-        // console.log("GroupCategoryPageContentLazy.handleBlur.e", e)
-        const data = e.target.value
-        const serverResponse = await delayer(() => fetch(data))
-        // console.log("GroupCategoryPageContentLazy.serverResponse", serverResponse)
-    }
+    const handleChange = async (e) => {
+        const data = e.target.value;
+        const serverResponse = await delayer(() => fetch(data));
+    };
 
-    return (<>
-        {loading && <LoadingSpinner />}
-        {error && <ErrorHandler errors={error} />}
-        {entity && <ProgramPageContent program={entity}  onChange={handleChange} onBlur={handleBlur} />}
-    </>)
-}
+    const handleBlur = async (e) => {
+        const data = e.target.value;
+        const serverResponse = await delayer(() => fetch(data));
+    };
 
+    return (
+        <>
+            {loading && <LoadingSpinner />}
+            {error && <ErrorHandler errors={error} />}
+            {entity && program?.id && (
+                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur} />
+            )}
+            {entity && !program?.id && (
+                <div>
+                    {entity.programs.map((program) => (
+                        <ProgramLargeCard key={program.id} program={program} />
+                    ))}
+                </div>
+            )}
+        </>
+    );
+};
 /**
  * A page component for displaying lazy-loaded content of an program entity.
  *
@@ -99,7 +110,7 @@ const ProgramPageContentLazy = ({program}) => {
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
 export const ProgramPage = () => {
-    const {id} = useParams()
-    const program = {id}
-    return <ProgramPageContentLazy program={program} />
-}
+    const { id } = useParams();
+    const program = id ? { id } : {};
+    return <ProgramPageContentLazy program={program} />;
+};

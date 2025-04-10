@@ -1,5 +1,5 @@
 
-import { ProgramPage, ProgramRouterSegment, SubjectRouterSegment } from "@hrbolek/uoisfrontend-zp";
+import { ProgramPage, ProgramRouterSegment} from "@ProgramPage";
 import {
       createBrowserRouter,
       RouterProvider
@@ -10,11 +10,10 @@ import {
 export const Routes = [
     // UserRouterSegment
     {
-        path: "/hello/:id",
+        path: "/Program/:id",
         element: <ProgramPage />
     },
     ProgramRouterSegment,
-    SubjectRouterSegment
 ]
 
 // const router = createBrowserRouter(Routes, {basename: "/ug"});

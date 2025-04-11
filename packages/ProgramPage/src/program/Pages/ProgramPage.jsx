@@ -3,10 +3,11 @@ import { useParams } from "react-router"
 
 import { CreateDelayer, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import { ProgramLargeCard } from "../Components"
+import {ProgramLargeCard, ProgramMediumCard, ProgramMediumContent} from "../Components"
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
+import { SubjectList } from "../Components/SubjectList"
 /**
  * A page content component for displaying detailed information about an program entity.
  *
@@ -27,14 +28,16 @@ import { ProgramsListQuery } from "../Queries";
  * 
  * <ProgramPageContent program={programEntity} />
  */
-const ProgramPageContent = ({program}) => {
-    return (<>
-        <ProgramPageNavbar program={program} />
-        <ProgramLargeCard program={program}>
-            {ProgramPage.name}
-        </ProgramLargeCard>
-    </>)
-}
+const ProgramPageContent = ({ program }) => {
+    return (
+        <>
+            <ProgramPageNavbar program={program} />
+            <ProgramLargeCard program={program}>
+            </ProgramLargeCard>
+
+        </>
+    );
+};
 
 /**
  * A lazy-loading component for displaying content of an program entity.
@@ -113,4 +116,6 @@ export const ProgramPage = () => {
     const program = id ? { id } : null; // Pass `null` if no `id`
     return <ProgramPageContentLazy program={program} />;
 };
+
+
 

@@ -28,12 +28,13 @@ import { ProgramMediumContent } from "./ProgramMediumContent"
  *   <p>Additional details or actions for the entity.</p>
  * </ProgramMediumCard>
  */
-export const ProgramMediumCard = ({program, children}) => {
+
+export const ProgramMediumCard = ({ program, children }) => {
     return (
         <ProgramCardCapsule title={<><PersonFill /> <ProgramLink program={program} /></>}>
             <ProgramMediumContent program={program}>
                 {children}
             </ProgramMediumContent>
         </ProgramCardCapsule>
-    )
-}
+    );
+};

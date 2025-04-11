@@ -1,6 +1,7 @@
 /**
  * A component that displays medium-level content for an program entity.
  *
+
  * This component renders a label "ProgramMediumContent" followed by a serialized representation of the `program` object
  * and any additional child content. It is designed to handle and display information about an program entity object.
  *
@@ -21,12 +22,19 @@
  *   <p>Additional information about the entity.</p>
  * </ProgramMediumContent>
  */
-export const ProgramMediumContent = ({program, children}) => {
+
+export const ProgramMediumContent = ({ program }) => {
     return (
-        <>
-            ProgramMediumContent <br />
-            {JSON.stringify(program)}
-            {children}
-        </>
-    )
-}
+        <div>
+            {program.subjects && program.subjects.length > 0 ? (
+                <ul>
+                    {program.subjects.map((subject) => (
+                        <li key={subject.id}><a href={"/subject/"+subject.id}>{subject.name}</a></li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No subjects available.</p>
+            )}
+        </div>
+    );
+};

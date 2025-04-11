@@ -1,23 +1,34 @@
 import { createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
 
+
 export const ProgramLinkFragment = createQueryStrLazy(
     `
 fragment ProgramLink on ProgramGQLModel {
+__typename
   id
   name
 }
 `);
 
+
+
 export const ProgramMediumFragment = createQueryStrLazy(
     `
 fragment ProgramMedium on ProgramGQLModel {
+__typename
   ...ProgramLink
-}
+  subjects {
+    __typename
+      id
+      name
+    }
+  }
 `, ProgramLinkFragment);
 
 export const ProgramLargeFragment = createQueryStrLazy(
     `
 fragment ProgramLarge on ProgramGQLModel {
+__typename
   ...ProgramMedium
   name
 }
@@ -27,8 +38,11 @@ fragment ProgramLarge on ProgramGQLModel {
 export const ProgramsListQuery = createQueryStrLazy(
     `
 query ProgramsListQuery {
-  programs {
-    ...ProgramLarge
+  programPage {
+  __typename
+    id
+    name
   }
 }
-`, ProgramLargeFragment);
+`
+);

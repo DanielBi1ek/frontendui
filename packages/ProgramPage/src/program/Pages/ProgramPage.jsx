@@ -7,7 +7,6 @@ import { ProgramLargeCard } from "../Components"
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
-
 /**
  * A page content component for displaying detailed information about an program entity.
  *
@@ -62,7 +61,7 @@ const ProgramPageContent = ({program}) => {
 const ProgramPageContentLazy = ({ program }) => {
     const { error, loading, entity, fetch } = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramsListQuery,
-        program?.id ? program : undefined
+        program?.id ? { id: program.id } : {} // Pass default object
     );
     const [delayer] = useState(() => CreateDelayer());
 
@@ -110,7 +109,8 @@ const ProgramPageContentLazy = ({ program }) => {
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
 export const ProgramPage = () => {
-    const { id } = useParams();
-    const program = id ? { id } : {};
+    const { id } = useParams(); // Get the `id` from the URL
+    const program = id ? { id } : null; // Pass `null` if no `id`
     return <ProgramPageContentLazy program={program} />;
 };
+

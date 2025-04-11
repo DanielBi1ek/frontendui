@@ -52,7 +52,7 @@ export const useAsyncAction = (AsyncAction, queryVariables, params = { deferred:
     const fetchPromise = useRef(false)
     const lastMergedParams = useRef(queryVariables);
     // const items = useSelector((state) => state["items"]);
-    const { id } = queryVariables
+    const { id } = queryVariables; // Safely destructure
     // const result = items[id];
     const items = useSelector((state) => {
         // if (!state.items) {

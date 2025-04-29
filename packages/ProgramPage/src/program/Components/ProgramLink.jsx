@@ -31,4 +31,13 @@ export const ProgramURI = '/program/program/view/';
  */
 export const ProgramLink = ({program}) => {
     return <ProxyLink to={ProgramURI + program.id}>{program.name}</ProxyLink>
+
 }
+
+export const ProgramDetails = ({program}) => {
+    return <ProxyLink to={`/program/program/view/${program.id}`}>{program.name}</ProxyLink>;
+}
+
+
+
+

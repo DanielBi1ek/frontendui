@@ -8,6 +8,7 @@ __typename
   id
   name
 }
+
 `);
 
 
@@ -17,10 +18,13 @@ export const ProgramMediumFragment = createQueryStrLazy(
 fragment ProgramMedium on ProgramGQLModel {
 __typename
   ...ProgramLink
-  subjects {
-    __typename
-      id
+    type {
       name
+    }
+    guarantors {
+      abbreviation
+      name
+      
     }
   }
 `, ProgramLinkFragment);

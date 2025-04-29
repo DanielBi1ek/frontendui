@@ -1,5 +1,6 @@
 
 import {ProgramRouterSegment, ProgramPage} from "@ProgramPage";
+import {ProgramDetailsPage} from "@ProgramDetailsPage";
 import {
       createBrowserRouter,
       RouterProvider
@@ -14,8 +15,8 @@ export const Routes = [
         element: <ProgramPage />
     },
     {
-        path: "/program",
-        element: <ProgramPage />
+        path: "/program/program/view/:id",
+        element: <ProgramDetailsPage/>
     },
     ProgramRouterSegment,
 ]

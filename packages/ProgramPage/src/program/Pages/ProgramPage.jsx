@@ -7,7 +7,6 @@ import {ProgramLargeCard, ProgramMediumCard, ProgramMediumContent} from "../Comp
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
-import { SubjectList } from "../Components/SubjectList"
 /**
  * A page content component for displaying detailed information about an program entity.
  *

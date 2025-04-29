@@ -25,16 +25,31 @@
 
 export const ProgramMediumContent = ({ program }) => {
     return (
-        <div>
-            {program.subjects && program.subjects.length > 0 ? (
-                <ul>
-                    {program.subjects.map((subject) => (
-                        <li key={subject.id}><a href={"/subject/"+subject.id}>{subject.name}</a></li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No subjects available.</p>
+        <div className="program-medium-content">
+
+            {/* Display program type */}
+            {program.type && (
+                <div className="program-type">
+                    <strong>Typ: </strong> {program.type.name}
+                </div>
+            )}
+
+            {/* Display guarantors */}
+            {program.guarantors && program.guarantors.length > 0 && (
+                <div className="program-guarantors">
+                    <strong>Guarantors:</strong>
+                    <ul>
+                        {program.guarantors.map((guarantor) => (
+                            <li key={guarantor.name}>
+                                {guarantor.abbreviation
+                                    ? `${guarantor.abbreviation} - ${guarantor.name}`
+                                    : guarantor.name}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
         </div>
     );
 };
+

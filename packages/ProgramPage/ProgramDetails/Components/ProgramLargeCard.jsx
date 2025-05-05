@@ -2,7 +2,6 @@ import Row from "react-bootstrap/Row"
 import { LeftColumn, MiddleColumn } from "@hrbolek/uoisfrontend-shared"
 import { ProgramCardCapsule } from "./ProgramCardCapsule"
 import { ProgramMediumCard } from "./ProgramMediumCard"
-import { ProgramButton } from "./ProgramCUDButton";
 
 /**
  * A large card component for displaying detailed content and layout for an program entity.
@@ -28,45 +27,10 @@ import { ProgramButton } from "./ProgramCUDButton";
  *   <p>Additional content for the middle column.</p>
  * </ProgramLargeCard>
  */
-
-const ProgramLargeCardWithButton = ({ program }) => {
-    const handleDone = (updatedProgram) => {
-        console.log("Operace dokončena:", updatedProgram);
-    };
-
-    return (
-        <ProgramLargeCard program={program}>
-            {/* Přidání tlačítka do MiddleColumn */}
-            <ProgramButton
-                operation="U"
-                program={program}
-                onDone={handleDone}
-            >
-                Upravit Program
-            </ProgramButton>
-            <br />
-            <ProgramButton
-                operation="C"
-                program={{ name: "Nový Program", name_en: "New Program EN" }}
-                onDone={handleDone}
-            >
-                Vložit Program
-            </ProgramButton>
-            <br />
-            <ProgramButton
-                operation="D"
-                program={program}
-                onDone={handleDone}
-            >
-                Smazat Program
-            </ProgramButton>
-        </ProgramLargeCard>
-    );
-};
-
-export default ProgramLargeCardWithButton;
 export const ProgramLargeCard = ({program, children}) => {
     return (
+
+
         <ProgramCardCapsule program={program} >
             <Row>
                 <LeftColumn>

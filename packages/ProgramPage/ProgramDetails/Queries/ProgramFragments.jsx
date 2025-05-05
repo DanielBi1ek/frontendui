@@ -11,19 +11,16 @@ __typename
 
 `);
 
-
+// Garant id:  5f0c247e-931f-11ed-9b95-0242ac110002
 
 export const ProgramMediumFragment = createQueryStrLazy(
     `
 fragment ProgramMedium on ProgramGQLModel {
 __typename
   ...ProgramLink
-    type {
-      name
-    }
-    guarantors {
-      abbreviation
-      name
+    subjects {
+        name
+    
       
     }
   }
@@ -35,7 +32,6 @@ fragment ProgramLarge on ProgramGQLModel {
 __typename
   ...ProgramMedium
   name
-  
 }
 `, ProgramMediumFragment);
 

@@ -7,6 +7,9 @@ import {ProgramLargeCard, ProgramMediumCard, ProgramMediumContent} from "../Comp
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
+import { ProgramButton } from "../Components"
+import {ProgramInsertAsyncAction} from "../Queries";
+
 /**
  * A page content component for displaying detailed information about an program entity.
  *
@@ -28,12 +31,37 @@ import { ProgramsListQuery } from "../Queries";
  * <ProgramPageContent program={programEntity} />
  */
 const ProgramPageContent = ({ program }) => {
+    const handleDone = (updatedProgram) => {
+        console.log("Operation completed:", updatedProgram);
+    };
+
     return (
         <>
             <ProgramPageNavbar program={program} />
             <ProgramLargeCard program={program}>
-            </ProgramLargeCard>
 
+                <ProgramButton
+                    operation="U"
+                    program={program}
+                    onDone={handleDone}>
+                    Edit Program
+                </ProgramButton>
+                <br/>
+
+                <ProgramButton
+                    operation="C"
+                    program={{name: "New Program", name_en: "New Program EN" }}
+                    onDone={handleDone}>
+                    Insert Program
+                </ProgramButton>
+                <br/>
+                <ProgramButton
+                    operation="D"
+                    program={program}
+                    onDone={handleDone}>
+                    Delete Program
+                </ProgramButton>
+            </ProgramLargeCard>
         </>
     );
 };

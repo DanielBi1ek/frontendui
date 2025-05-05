@@ -3,10 +3,9 @@ import { ButtonWithDialog, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfro
 // import { UpdateProgramButton } from "./CUDButtons/UpdateProgramButton";
 // import { DeleteProgramButton } from "./CUDButtons/DeleteProgramButton";
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
-import { ProgramInsertAsyncAction, ProgramUpdateAsyncAction, ProgramDeleteAsyncAction} from "../Queries";
-import {ProgramMediumEditableContent} from "./ProgramMediumEditableContent";
+
 /**
- * ProgramCUDButton ComponentS
+ * ProgramCUDButton Component
  *
  * A higher-order component that dynamically renders one of the following components
  * based on the `operation` prop:
@@ -66,8 +65,11 @@ import {ProgramMediumEditableContent} from "./ProgramMediumEditableContent";
  *   );
  * };
  *
+ *
  * @returns {JSX.Element} The dynamically selected button component for the specified operation.
  */
+
+
 export const ProgramButton = ({ operation, children, program, onDone = () => {}, ...props }) => {
     const operationConfig = {
         C: {
@@ -102,28 +104,11 @@ export const ProgramButton = ({ operation, children, program, onDone = () => {},
 
     const { error, loading, fetch, entity } = useAsyncAction(asyncAction, program, { deferred: true });
     const handleClick = async (params = {}) => {
-        const fetchParams = {
-            ...program,
-            ...params,
-            ...(operation === "U" && {
-                lastchange: program?.lastchange || new Date().toISOString() // Ensure lastchange is included for update
-            }),
-            ...(operation === "D" && {
-                id: program?.id, // Ensure id is included for delete
-                lastchange: program?.lastchange // Ensure lastchange is included for delete
-            }),
-        };
-
-        console.log("Fetch Params:", fetchParams); // Log the parameters being sent
-
-        try {
-            const result = await fetch(fetchParams);
-            console.log("GraphQL Response:", result); // Log the server response
-            onDone(result); // Pass the result to the external callback
-        } catch (error) {
-            console.error("Operation failed:", error); // Log the error
-        }
+        const fetchParams = { ...program, ...params };
+        const freshProgram = await fetch(fetchParams);
+        onDone(freshProgram); // Pass the result to the external callback
     };
+
     // Validate required fields for "U" and "D"
     if ((operation === 'U' || operation === 'D') && !program?.id) {
         return <ErrorHandler errors={`For '${operation}' operation, 'program' must include an 'id' key.`} />;

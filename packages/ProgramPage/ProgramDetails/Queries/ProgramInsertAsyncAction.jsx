@@ -2,10 +2,10 @@ import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfront
 import { ProgramLargeFragment } from "./ProgramFragments";
 
 const ProgramInsertMutation = createQueryStrLazy(
-    `
-mutation ProgramInsertMutation($id: UUID, $name: String!) {
+`
+mutation ProgramInsertMutation($id: UUID, $name: String, $name_en: String) {
   result: programInsert(
-    program: {id: $id, name: $name}
+    program: {id: $id, name: $name, nameEn: $name_en}
   ) {
     ... on InsertError {
       failed
@@ -16,8 +16,7 @@ mutation ProgramInsertMutation($id: UUID, $name: String!) {
   }
 }
 `,
-    ProgramLargeFragment
-);
+    ProgramLargeFragment)
 
 
 export const ProgramInsertAsyncAction = createAsyncGraphQLAction(ProgramInsertMutation)

@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
-import { ProgramReadAsyncAction } from "../Queries";
+import { ProgramReadAsyncAction } from "../../../ProgramDetails/Queries";
 import { LoadingSpinner, ErrorHandler } from "@hrbolek/uoisfrontend-shared";
 import {ProgramPageNavbar} from "./ProgramPageNavbar";
-import {ProgramCardCapsule, ProgramLargeCard} from "../Components";
+import {ProgramCardCapsule, ProgramLargeCard} from "../../../ProgramDetails/Components";
 
 
 
@@ -25,11 +25,6 @@ export const ProgramDetailsPage = () => {
             {entity && (
                 <div>
                     <ProgramLargeCard program={entity}>
-                        <h1>{entity.name}</h1>
-                        <p>Type: {entity.type?.name}</p>
-                        <h3>Details:</h3>
-                        <p>Lorem ipsum matematika + matematika = matematika2</p>
-
                         <h3>Guarantors:</h3>
                         <ul>
 

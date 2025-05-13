@@ -19,7 +19,9 @@
     "packages/*"
   ],
   "devDependencies": {
+    "esbuild": "^0.25.4",
     "jsdoc": "^4.0.4",
+    "vite": "^6.3.5",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^0.21.1"
   },

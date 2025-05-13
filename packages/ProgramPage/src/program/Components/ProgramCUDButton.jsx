@@ -106,11 +106,11 @@ export const ProgramButton = ({ operation, children, program, onDone = () => {},
             ...program,
             ...params,
             ...(operation === "U" && {
-                lastchange: program?.lastchange || new Date().toISOString() // Ensure lastchange is included for update
+                lastchange: program?.lastchange || new Date().toISOString() // Ensure lastchange is included for update    PAKLIZE SE DATUM VALIDUJE TAK, ABY PRI EDITACI NEBO SMAZANI DAT Z DATABAZE BYLO VETSI NEZ JE POSLEDNI LAST UPDATE A ZAROVEN SE DATUM GENERUJE NA STRANE KLIENTA, HROZI, ZE ZASKODNIK MUZE ZMENIT DATUM NAPRIKLAD NA ROK 2999 A ZABLOKUJE TAK JAKOUKOLIV ZMENU JINYM UZIVATELUM
             }),
             ...(operation === "D" && {
                 id: program?.id, // Ensure id is included for delete
-                lastchange: program?.lastchange // Ensure lastchange is included for delete
+                lastchange: program?.lastchange || new Date().toISOString() // Ensure lastchange is included for delete
             }),
         };
 

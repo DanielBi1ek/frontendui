@@ -7,6 +7,7 @@ fragment ProgramLink on ProgramGQLModel {
 __typename
   id
   name
+  lastchange
 }
 
 `);

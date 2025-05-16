@@ -53,6 +53,7 @@ export const CardCapsule = ({title="", children=null, id=null}) => {
                 <Card.Title>
                     {title}
                 </Card.Title>
+
             </Card.Header>
             <Card.Body>
                 {children}

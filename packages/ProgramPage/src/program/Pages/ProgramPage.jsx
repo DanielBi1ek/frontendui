@@ -1,13 +1,23 @@
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { useParams } from "react-router"
+import {BackpackFill} from "react-bootstrap-icons"
 
-import { CreateDelayer, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfrontend-shared"
+import {
+    CardCapsule,
+    CreateDelayer,
+    ErrorHandler,
+    LeftColumn,
+    LoadingSpinner,
+    MiddleColumn
+} from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import {ProgramLargeCard, ProgramMediumCard, ProgramMediumContent} from "../Components"
+import {ProgramCardCapsule, ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
 import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
 import { ProgramButton } from "../Components"
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
 
 /**
  * A page content component for displaying detailed information about an program entity.
@@ -29,6 +39,68 @@ import { ProgramButton } from "../Components"
  *
  * <ProgramPageContent program={programEntity} />
  */
+
+// TODO presunout do components
+export const ButtonCardCapsule = ({title="", children=null, id=null, program}) => {
+    useEffect(() => {
+        if (!id) return
+        const hash = window?.location?.hash; // Get the hash from the URL
+        // console.log("CardCapsule", hash, id, (hash !== `#${id}`))
+        if (hash !== `#${id}`) return
+
+        const scrollTo = () => {
+            const elementId = hash.substring(1); // Remove the '#' to get the ID
+            const targetElement = document.getElementById(elementId);
+
+            if (targetElement) {
+                // Scroll to the element if it exists
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        const timeout = setTimeout(scrollTo, 100);
+
+        return () => clearTimeout(timeout);
+    }, [id]); // Run only once when the component mounts
+
+    return (
+        <Card id={id}>
+            <Card.Header className="d-flex justify-content-between">
+                <Card.Title>
+                    {title}
+                </Card.Title>
+                <div>
+                <ProgramButton
+                    operation="U"
+                    program={program}>
+                    <button className="btn btn-sm btn-warning" style={{width: "115px", margin:"1px"}}>
+                        Edit Program
+                    </button>
+                </ProgramButton>
+                <ProgramButton
+                    operation="C"
+                    program={{name: "New Program", name_en: "New Program EN" }}
+                    >
+                    <button className="btn btn-sm btn-primary" style={{width: "115px", margin:"1px"}}>
+                        Insert Program
+                    </button>
+                </ProgramButton>
+                <ProgramButton
+                    operation="D"
+                    program={program} // Ensure the 'id' key is included
+                    >
+                    <button className="btn btn-sm btn-danger" style={{width: "115px", margin:"1px"}}>
+                        Delete Program
+                    </button>
+                </ProgramButton>
+
+                </div>
+            </Card.Header>
+            <Card.Body>
+                {children}
+            </Card.Body>
+        </Card>
+    )
+}
 const ProgramPageContent = ({ program }) => {
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
@@ -36,8 +108,20 @@ const ProgramPageContent = ({ program }) => {
 
     return (
         <>
-            <ProgramPageNavbar program={program} />
-            <ProgramLargeCard program={program}>
+            <ProgramPageNavbar program={program}/>
+            <ButtonCardCapsule title={<ProgramLink program={program}/>} program={program}>
+
+                <Row>
+                    <LeftColumn>
+                        <ProgramMediumCard program={program}/>
+                    </LeftColumn>
+                    <MiddleColumn>
+
+                    </MiddleColumn>
+
+                </Row>
+            </ButtonCardCapsule>
+            <ProgramLargeCard program={program} >
 
                 <ProgramButton
                     operation="U"
@@ -70,6 +154,7 @@ const ProgramPageContent = ({ program }) => {
                             Delete Program
                         </button>
                     </ProgramButton>
+
 
             </ProgramLargeCard>
         </>

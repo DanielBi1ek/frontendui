@@ -32,6 +32,7 @@ import { ProgramLink } from "./ProgramLink"
 export const ProgramCardCapsule = ({program, children, title=<><PersonFill /> <ProgramLink program={program} /></>}) => {
     return (
         <CardCapsule title={title}>
+
             {children}
         </CardCapsule>
     )

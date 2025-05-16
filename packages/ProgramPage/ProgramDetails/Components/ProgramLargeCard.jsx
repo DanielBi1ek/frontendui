@@ -1,12 +1,12 @@
 import Row from "react-bootstrap/Row"
 import { LeftColumn, MiddleColumn } from "@hrbolek/uoisfrontend-shared"
-import { ProgramCardCapsule } from "./ProgramCardCapsule"
+import { ProgramDetailsCardCapsule } from "./ProgramDetailsCardCapsule"
 import { ProgramMediumCard } from "./ProgramMediumCard"
 
 /**
  * A large card component for displaying detailed content and layout for an program entity.
  *
- * This component wraps an `ProgramCardCapsule` with a flexible layout that includes multiple
+ * This component wraps an `ProgramDetailsCardCapsule` with a flexible layout that includes multiple
  * columns. It uses a `Row` layout with a `LeftColumn` for displaying an `ProgramMediumCard`
  * and a `MiddleColumn` for rendering additional children.
  *
@@ -31,7 +31,7 @@ export const ProgramLargeCard = ({program, children}) => {
     return (
 
 
-        <ProgramCardCapsule program={program} >
+        <ProgramDetailsCardCapsule program={program} >
             <Row>
                 <LeftColumn>
                     <ProgramMediumCard program={program}/>
@@ -40,6 +40,6 @@ export const ProgramLargeCard = ({program, children}) => {
                     {children}
                 </MiddleColumn>
             </Row>
-        </ProgramCardCapsule>
+        </ProgramDetailsCardCapsule>
     )
 }

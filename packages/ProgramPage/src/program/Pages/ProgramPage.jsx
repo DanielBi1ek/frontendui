@@ -8,12 +8,11 @@ import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
 import { ProgramButton } from "../Components"
-import {ProgramInsertAsyncAction} from "../Queries";
 
 /**
  * A page content component for displaying detailed information about an program entity.
  *
- * This component utilizes `ProgramLargeCard` to create a structured layout and displays 
+ * This component utilizes `ProgramLargeCard` to create a structured layout and displays
  * the serialized representation of the `program` object within the card's content.
  *
  * @component
@@ -27,7 +26,7 @@ import {ProgramInsertAsyncAction} from "../Queries";
  * @example
  * // Example usage:
  * const programEntity = { id: 123, name: "Sample Entity" };
- * 
+ *
  * <ProgramPageContent program={programEntity} />
  */
 const ProgramPageContent = ({ program }) => {
@@ -44,7 +43,11 @@ const ProgramPageContent = ({ program }) => {
                     operation="U"
                     program={program}
                     onDone={handleDone}>
-                    Edit Program
+                    <button className="btn btn-sm btn-warning" style={{width: "115px", margin:"1px"}}>
+                        Edit Program
+                    </button>
+
+
                 </ProgramButton>
                 <br/>
 
@@ -52,15 +55,22 @@ const ProgramPageContent = ({ program }) => {
                     operation="C"
                     program={{name: "New Program", name_en: "New Program EN" }}
                     onDone={handleDone}>
-                    Insert Program
+                    <button className="btn btn-sm btn-primary" style={{width: "115px", margin:"1px"}}>
+                        Insert Program
+                    </button>
+
                 </ProgramButton>
                 <br/>
-                <ProgramButton
-                    operation="D"
-                    program={program}
-                    onDone={handleDone}>
-                    Delete Program
-                </ProgramButton>
+
+                    <ProgramButton
+                        operation="D"
+                        program={program} // Ensure the 'id' key is included
+                        onDone={handleDone}>
+                        <button className="btn btn-sm btn-danger" style={{width: "115px", margin:"1px"}}>
+                            Delete Program
+                        </button>
+                    </ProgramButton>
+
             </ProgramLargeCard>
         </>
     );
@@ -143,6 +153,3 @@ export const ProgramPage = () => {
     const program = id ? { id } : null; // Pass `null` if no `id`
     return <ProgramPageContentLazy program={program} />;
 };
-
-
-

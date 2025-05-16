@@ -10,7 +10,7 @@ import { ProgramLink } from "./ProgramLink"
  * inside the card body. It is designed for use with entities represented by the `program` object.
  *
  * @component
- * @param {Object} props - The props for the ProgramCardCapsule component.
+ * @param {Object} props - The props for the ProgramDetailsCardCapsule component.
  * @param {Object} props.program - The object representing the program entity.
  * @param {string|number} props.program.id - The unique identifier for the program entity.
  * @param {string} props.program.name - The display name for the program entity.
@@ -20,14 +20,14 @@ import { ProgramLink } from "./ProgramLink"
  *
  * @example
  * // Example usage:
- * import { ProgramCardCapsule } from './ProgramCardCapsule';
+ * import { ProgramDetailsCardCapsule } from './ProgramDetailsCardCapsule';
  * import { Button } from 'react-bootstrap';
  *
  * const programEntity = { id: 123, name: "Example Entity" };
  *
- * <ProgramCardCapsule program={programEntity}>
+ * <ProgramDetailsCardCapsule program={programEntity}>
  *   <Button variant="primary">Click Me</Button>
- * </ProgramCardCapsule>
+ * </ProgramDetailsCardCapsule>
  */
 export const ProgramCardCapsule = ({program, children, title=<><PersonFill /> <ProgramLink program={program} /></>}) => {
     return (

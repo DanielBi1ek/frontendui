@@ -24,6 +24,8 @@
  */
 import {Link} from "react-router-dom";
 
+
+
 export const ProgramMediumContent = ({ program }) => {
     return (
         <div className="program-medium-content">

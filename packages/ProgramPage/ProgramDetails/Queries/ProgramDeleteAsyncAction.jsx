@@ -2,7 +2,7 @@ import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfront
 import { ProgramLargeFragment } from "./ProgramFragments";
 
 const ProgramDeleteMutation = createQueryStrLazy(
-`
+    `
 mutation ProgramDeleteMutation($id: UUID!, $lastchange: DateTime!) {
   result: programDelete(
     program: {id: $id, lastchange: $lastchange}

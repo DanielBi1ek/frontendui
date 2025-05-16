@@ -1,4 +1,4 @@
-export * from './ProgramCardCapsule'
+export * from './ProgramDetailsCardCapsule'
 export * from './ProgramChildren'
 export * from './ProgramCUDButton'
 export * from './ProgramLargeCard'

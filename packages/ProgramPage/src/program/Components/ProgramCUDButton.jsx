@@ -1,3 +1,4 @@
+
 import { ButtonWithDialog, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfrontend-shared";
 // import { InsertProgramButton } from "./CUDButtons/InsertProgramButton";
 // import { UpdateProgramButton } from "./CUDButtons/UpdateProgramButton";
@@ -83,6 +84,7 @@ export const ProgramButton = ({ operation, children, program, onDone = () => {},
             renderContent: () => <ProgramMediumEditableContent program={program} />,
         },
         D: {
+
             asyncAction: ProgramDeleteAsyncAction,
             dialogTitle: "Chcete odebrat program?",
             loadingMsg: "Odstraňuji program",

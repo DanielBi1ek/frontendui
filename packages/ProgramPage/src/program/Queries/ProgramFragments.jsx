@@ -44,10 +44,13 @@ __typename
 export const ProgramsListQuery = createQueryStrLazy(
     `
 query ProgramsListQuery {
-  programPage {
+  programs{
   __typename
     id
     name
+    type {
+      name
+    }
   }
 }
 `

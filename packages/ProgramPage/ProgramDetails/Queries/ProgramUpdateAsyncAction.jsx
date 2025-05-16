@@ -1,23 +1,15 @@
 import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
 import { ProgramLargeFragment } from "./ProgramFragments";
 
-const ProgramUpdateMutation = createQueryStrLazy(
+const SubjectUpdateMutation = createQueryStrLazy(
 `
-mutation ProgramUpdateMutation($id: UUID!, $lastchange: DateTime!, $name: String, $name_en: String) {
-  result: programUpdate(
-    program: {id: $id, lastchange: $lastchange, name: $name, nameEn: $name_en}
-  ) {
-    ... on ProgramGQLModelUpdateError {
-      failed
-      msg
-      input
-      Entity {
-        ...ProgramLarge
-      }      
-    }
-    ...ProgramLarge
+mutation InsertSubject($name: String!, $code: String!) {
+  insertSubject(input: { name: $name, code: $code }) {
+    id
+    name
+    code
   }
 }
 `, ProgramLargeFragment)
 
-export const ProgramUpdateAsyncAction = createAsyncGraphQLAction(ProgramUpdateMutation)
+export const SubjectUpdateAsyncAction = createAsyncGraphQLAction(SubjectUpdateMutation)

@@ -6,7 +6,7 @@ import { ProgramMediumContent } from "./ProgramMediumContent"
 /**
  * A card component that displays detailed content for an program entity.
  *
- * This component combines `ProgramCardCapsule` and `ProgramMediumContent` to create a card layout
+ * This component combines `ProgramDetailsCardCapsule` and `ProgramMediumContent` to create a card layout
  * with a title and medium-level content. The title includes a `PersonFill` icon and a link to
  * the program entity's details, while the body displays serialized details of the entity along
  * with any additional children passed to the component.

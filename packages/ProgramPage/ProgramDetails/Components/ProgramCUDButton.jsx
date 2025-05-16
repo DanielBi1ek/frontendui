@@ -3,6 +3,8 @@ import { ButtonWithDialog, ErrorHandler, LoadingSpinner } from "@hrbolek/uoisfro
 // import { UpdateProgramButton } from "./CUDButtons/UpdateProgramButton";
 // import { DeleteProgramButton } from "./CUDButtons/DeleteProgramButton";
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
+import {ProgramDeleteAsyncAction, ProgramInsertAsyncAction, SubjectUpdateAsyncAction} from "../Queries";
+import {ProgramMediumEditableContent} from "@hrbolek/uoisfrontend-zp";
 
 /**
  * ProgramCUDButton Component
@@ -79,7 +81,7 @@ export const ProgramButton = ({ operation, children, program, onDone = () => {},
             renderContent: () => <ProgramMediumEditableContent program={program} />,
         },
         U: {
-            asyncAction: ProgramUpdateAsyncAction,
+            asyncAction: SubjectUpdateAsyncAction,
             dialogTitle: "Upravit program",
             loadingMsg: "Ukládám program",
             renderContent: () => <ProgramMediumEditableContent program={program} />,

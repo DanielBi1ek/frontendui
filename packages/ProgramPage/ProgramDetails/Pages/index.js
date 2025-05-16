@@ -1,4 +1,4 @@
 export * from './ProgramPage'
 export * from './ProgramPageNavbar'
 export * from './ProgramRouterSegment'
-export * from '../../../ProgramDetails/Pages/ProgramDetailsPage'
+export * from './ProgramDetailsPage'

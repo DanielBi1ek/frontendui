@@ -9,7 +9,7 @@ export const ProgramURI = '/program/program/view/';
  * the `program` object's `name` as its clickable content.
  *
  * @function ProgramLink
- * @param {Object} props - The properties for the `ProgramLink` component.
+ * @param {Object} props - The properties for the `ProgramDetailsLink` component.
  * @param {Object} props.program - The object representing the "program" entity.
  * @param {string|number} props.program.id - The unique identifier for the "program" entity. Used to construct the target URL.
  * @param {string} props.program.name - The display name for the "program" entity. Used as the link text.
@@ -20,7 +20,7 @@ export const ProgramURI = '/program/program/view/';
  * // Example usage with a sample program entity:
  * const programEntity = { id: 123, name: "Example Program Entity" };
  * 
- * <ProgramLink program={programEntity} />
+ * <ProgramDetailsLink program={programEntity} />
  * // Renders: <ProxyLink to="/program/program/view/123">Example Program Entity</ProxyLink>
  *
  * @remarks

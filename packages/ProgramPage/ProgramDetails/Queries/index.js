@@ -1,7 +1,7 @@
-export * from './ProgramInsertAsyncAction'
-export * from './ProgramReadAsyncAction'
-export * from './ProgramReadPageAsyncAction'
-export * from './ProgramUpdateAsyncAction'
-export * from './ProgramDeleteAsyncAction'
-export * from './ProgramFragments'
+export * from './SubjectInsertAsyncAction'
+export * from './ProgramDetailsReadAsyncAction'
+export * from './ProgramDetailsReadPageAsyncAction'
+export * from './SubjectUpdateAsyncAction'
+export * from './SubjectDeleteAsyncAction'
+export * from './ProgramDetailsFragments'
 

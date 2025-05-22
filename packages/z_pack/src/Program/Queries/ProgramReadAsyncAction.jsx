@@ -31,7 +31,7 @@ query ProgramReadQuery($id: UUID!) {
  * // Example usage:
  * const queryVariables = { id: "12345" };
  *
- * dispatch(ProgramReadAsyncAction(queryVariables))
+ * dispatch(ProgramDetailsReadAsyncAction(queryVariables))
  *   .then((result) => {
  *     console.log("Fetched data:", result);
  *   })

@@ -1,79 +1,56 @@
 import { useParams } from "react-router";
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
-import { ProgramReadAsyncAction } from "../Queries";
+import { ProgramDetailsReadAsyncAction } from "../Queries";
 import { LoadingSpinner, ErrorHandler } from "@hrbolek/uoisfrontend-shared";
 import {ProgramPageNavbar} from "../../src/program/Pages/ProgramPageNavbar";
-import {ProgramDetailsCardCapsule, ProgramLargeCard} from "../Components";
-import {ProgramButton} from "../../src/program/Components";
+import {ProgramDetailsLargeCard} from "../Components";
+import React, {useEffect, useState} from "react";
+import {SubjectButton} from "../Components";
 
 
-
-
-
-
-export const ProgramDetailsPage = (program) => {
+export const ProgramDetailsPage = () => {
     const { id } = useParams();
-    const { error, loading, entity } = useAsyncAction(ProgramReadAsyncAction, { id });
-    const handleDone = (updatedProgram) => {
-        console.log("Operation completed:", updatedProgram);
+    const { error, loading, entity } = useAsyncAction(ProgramDetailsReadAsyncAction, { id });
+    const [subjects, setSubjects] = useState([]);
+
+    useEffect(() => {
+        if (entity && entity.subjects) {
+            setSubjects(entity.subjects); // Populate subjects from the program
+        }
+    }, [entity]);
+    const handleDone = (newSubject) => {
+        setSubjects((prevSubjects) => [...prevSubjects, newSubject]); // Add the new subject to the list
     };
 
     return (
         <div>
-            <ProgramPageNavbar/>
-
-
-
-
-
+            <ProgramPageNavbar />
 
             {loading && <LoadingSpinner />}
             {error && <ErrorHandler errors={error} />}
             {entity && (
                 <div>
-                    <ProgramLargeCard program={entity}>
-                        <ProgramButton
-                            operation="U"
-                            program={{id: entity.id}}
-                            onDone={handleDone}>
-                            Edit Program
-                        </ProgramButton>
-                        <br/>
-
-                        <ProgramButton
+                    <ProgramDetailsLargeCard program={entity}>
+                        <SubjectButton
                             operation="C"
-                            program={{name: "New Program", name_en: "New Program EN" }}
-                            onDone={handleDone}>
-                            Insert Program
-                        </ProgramButton>
-                        <br/>
-                        <ProgramButton
-                            operation="D"
-                            program={{ id: entity.id }} // Ensure the 'id' key is included
-                            onDone={handleDone}>
-                            Delete Program
-                        </ProgramButton>
+                            subject={{
+                                name: "Nový předmět",
+                                nameEn: "New subject",
+                                programId: entity.id,
+                                groupId: "119086b2-d24d-43fe-89f3-d5365e5ad7e7",
+                                description: "",
+                                descriptionEn: "",
+                            }}
+                            onDone={handleDone} // Pass the callback
+                        >
+                            Add New Subject
+                        </SubjectButton>
 
-                        <h3>Guarantors:</h3>
-                        <ul>
-
-                            {Array.isArray(entity.guarantors) && entity.guarantors.length > 0 ? (
-                                entity.guarantors.map((guarantor) => (
-                                    <li key={guarantor.name}>
-                                        {guarantor.abbreviation
-                                            ? `${guarantor.abbreviation} - ${guarantor.name}`
-                                            : guarantor.name}
-                                    </li>
-                                ))
-                            ) : (
-                                <li>No guarantors available.</li>
-                            )}
-                        </ul>
-
-                    </ProgramLargeCard>
-
+                    </ProgramDetailsLargeCard>
                 </div>
             )}
         </div>
     );
 };
+
+

@@ -11,7 +11,7 @@ import { ProgramSubjectsAttribute } from "../Vectors/ProgramSubjectsAttribute"
 /**
  * A page content component for displaying detailed information about an program entity.
  *
- * This component utilizes `ProgramLargeCard` to create a structured layout and displays 
+ * This component utilizes `ProgramDetailsLargeCard` to create a structured layout and displays
  * the serialized representation of the `program` object within the card's content.
  *
  * @component
@@ -42,7 +42,7 @@ const ProgramPageContent = ({program}) => {
  * A lazy-loading component for displaying content of an program entity.
  *
  * This component is created using `createLazyComponent` and wraps `ProgramPageContent` to provide
- * automatic data fetching for the `program` entity. It uses the `ProgramReadAsyncAction` to fetch
+ * automatic data fetching for the `program` entity. It uses the `ProgramDetailsReadAsyncAction` to fetch
  * the entity data and dynamically injects it into the wrapped component as the `program` prop.
  *
  * @constant

@@ -35,8 +35,7 @@ export const ProgramLargeFragment = createQueryStrLazy(
 fragment ProgramLarge on ProgramGQLModel {
 __typename
   ...ProgramMedium
-  name
-  
+  name 
 }
 `, ProgramMediumFragment);
 

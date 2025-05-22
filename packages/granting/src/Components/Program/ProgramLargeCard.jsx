@@ -6,11 +6,11 @@ import { ProgramMediumCard } from "./ProgramMediumCard"
  * A large card component for displaying detailed content and layout for an program entity.
  *
  * This component wraps an `ProgramDetailsCardCapsule` with a flexible layout that includes multiple
- * columns. It uses a `Row` layout with a `LeftColumn` for displaying an `ProgramMediumCard`
+ * columns. It uses a `Row` layout with a `LeftColumn` for displaying an `ProgramDetailsMediumCard`
  * and a `MiddleColumn` for rendering additional children.
  *
  * @component
- * @param {Object} props - The properties for the ProgramLargeCard component.
+ * @param {Object} props - The properties for the ProgramDetailsLargeCard component.
  * @param {Object} props.program - The object representing the program entity.
  * @param {string|number} props.program.id - The unique identifier for the program entity.
  * @param {string} props.program.name - The name or label of the program entity.
@@ -22,9 +22,9 @@ import { ProgramMediumCard } from "./ProgramMediumCard"
  * // Example usage:
  * const programEntity = { id: 123, name: "Sample Entity" };
  * 
- * <ProgramLargeCard program={programEntity}>
+ * <ProgramDetailsLargeCard program={programEntity}>
  *   <p>Additional content for the middle column.</p>
- * </ProgramLargeCard>
+ * </ProgramDetailsLargeCard>
  */
 export const ProgramLargeCard = ({program}) => {
     return (

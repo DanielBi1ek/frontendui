@@ -1,12 +1,12 @@
 import { CardCapsule } from "@hrbolek/uoisfrontend-shared"
 import { PersonFill } from "react-bootstrap-icons"
-import { ProgramLink } from "./ProgramLink"
+import { ProgramDetailsLink } from "./ProgramDetailsLink"
 
 /**
- * A specialized card component that displays an `ProgramLink` as its title and encapsulates additional content.
+ * A specialized card component that displays an `ProgramDetailsLink` as its title and encapsulates additional content.
  *
  * This component extends the `CardCapsule` component by using a combination of a `PersonFill` icon and 
- * an `ProgramLink` component in the card's header. The `children` prop is used to render any content 
+ * an `ProgramDetailsLink` component in the card's header. The `children` prop is used to render any content
  * inside the card body. It is designed for use with entities represented by the `program` object.
  *
  * @component
@@ -29,7 +29,7 @@ import { ProgramLink } from "./ProgramLink"
  *   <Button variant="primary">Click Me</Button>
  * </ProgramDetailsCardCapsule>
  */
-export const ProgramDetailsCardCapsule = ({program, children, title=<><PersonFill /> <ProgramLink program={program} /></>}) => {
+export const ProgramDetailsCardCapsule = ({program, children, title=<><PersonFill /> <ProgramDetailsLink program={program} /></>}) => {
     return (
         <CardCapsule title={title}>
             {children}

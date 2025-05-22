@@ -1,5 +1,5 @@
 import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
-import { ProgramLargeFragment } from "./ProgramFragments";
+import { ProgramLargeFragment } from "./ProgramDetailsFragments";
 
 const ProgramReadPageQuery = createQueryStrLazy(
 `
@@ -11,4 +11,4 @@ query ProgramReadPageQuery($skip: Int, $limit: Int, $where: ProgramWhereInputFil
 `, 
     ProgramLargeFragment)
 
-export const ProgramReadPageAsyncAction = createAsyncGraphQLAction(ProgramReadPageQuery)
+export const ProgramDetailsReadPageAsyncAction = createAsyncGraphQLAction(ProgramReadPageQuery)

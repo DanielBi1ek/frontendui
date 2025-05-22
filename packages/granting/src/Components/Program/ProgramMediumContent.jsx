@@ -5,11 +5,11 @@ import { ProgramLink } from "./ProgramLink"
 /**
  * A component that displays medium-level content for an program entity.
  *
- * This component renders a label "ProgramMediumContent" followed by a serialized representation of the `program` object
+ * This component renders a label "ProgramDetailsMediumContent" followed by a serialized representation of the `program` object
  * and any additional child content. It is designed to handle and display information about an program entity object.
  *
  * @component
- * @param {Object} props - The properties for the ProgramMediumContent component.
+ * @param {Object} props - The properties for the ProgramDetailsMediumContent component.
  * @param {Object} props.program - The object representing the program entity.
  * @param {string|number} props.program.id - The unique identifier for the program entity.
  * @param {string} props.program.name - The name or label of the program entity.
@@ -21,9 +21,9 @@ import { ProgramLink } from "./ProgramLink"
  * // Example usage:
  * const programEntity = { id: 123, name: "Sample Entity" };
  * 
- * <ProgramMediumContent program={programEntity}>
+ * <ProgramDetailsMediumContent program={programEntity}>
  *   <p>Additional information about the entity.</p>
- * </ProgramMediumContent>
+ * </ProgramDetailsMediumContent>
  */
 export const ProgramMediumContent = ({program, children}) => {
     return (

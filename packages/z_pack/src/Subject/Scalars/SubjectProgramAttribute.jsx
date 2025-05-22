@@ -25,7 +25,7 @@ export const SubjectProgramAttribute = ({subject}) => {
     if (typeof program === 'undefined') return null
     return (
         <>
-            {/* Probably {'<ProgramMediumCard program=\{program\} />'} <br />
+            {/* Probably {'<ProgramDetailsMediumCard program=\{program\} />'} <br />
             {JSON.stringify(program)} */}
             <ProgramLink program={program} />
         </>

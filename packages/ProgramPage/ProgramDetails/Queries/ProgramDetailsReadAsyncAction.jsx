@@ -1,5 +1,5 @@
 import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
-import { ProgramLargeFragment } from "./ProgramFragments";
+import { ProgramLargeFragment } from "./ProgramDetailsFragments";
 
 const ProgramReadQuery = createQueryStrLazy(
 `
@@ -31,7 +31,7 @@ query ProgramReadQuery($id: UUID!) {
  * // Example usage:
  * const queryVariables = { id: "12345" };
  *
- * dispatch(ProgramReadAsyncAction(queryVariables))
+ * dispatch(ProgramDetailsReadAsyncAction(queryVariables))
  *   .then((result) => {
  *     console.log("Fetched data:", result);
  *   })
@@ -39,4 +39,4 @@ query ProgramReadQuery($id: UUID!) {
  *     console.error("Error fetching data:", error);
  *   });
  */
-export const ProgramReadAsyncAction = createAsyncGraphQLAction(ProgramReadQuery)
+export const ProgramDetailsReadAsyncAction = createAsyncGraphQLAction(ProgramReadQuery)

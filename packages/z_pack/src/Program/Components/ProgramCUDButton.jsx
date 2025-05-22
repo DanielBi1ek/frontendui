@@ -82,7 +82,7 @@ export const ProgramButton = ({ operation, children, program, onDone = () => {},
             renderContent: () => <ProgramMediumEditableContent program={program} />,
         },
         D: {
-            asyncAction: ProgramDeleteAsyncAction,
+            asyncAction: ProgramDetailsDeleteAsyncAction,
             dialogTitle: "Chcete odebrat program?",
             loadingMsg: "Odstraňuji program",
             renderContent: () => (

@@ -1,4 +1,4 @@
-import { ProgramURI } from "../Components/ProgramLink"
+import { ProgramURI } from "../Components/ProgramDetailsLink"
 import { ProgramPage } from "./ProgramPage"
 
 /**

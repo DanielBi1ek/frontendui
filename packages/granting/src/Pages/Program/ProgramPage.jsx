@@ -1,7 +1,7 @@
 import { createAsyncGraphQLAction } from "@hrbolek/uoisfrontend-gql-shared"
 import { createLazyComponent } from "@hrbolek/uoisfrontend-shared"
 import { useParams } from "react-router"
-import { ProgramLargeCard } from "../Components/Program/ProgramLargeCard"
+import { ProgramLargeCard } from "../Components/Program/ProgramDetailsLargeCard"
 
 const ProgramQueryRead = `
 query ProgramQueryRead($id: id) {
@@ -32,7 +32,7 @@ query ProgramQueryRead($id: id) {
  * // Example usage:
  * const queryVariables = { id: "12345" };
  *
- * dispatch(ProgramReadAsyncAction(queryVariables))
+ * dispatch(ProgramDetailsReadAsyncAction(queryVariables))
  *   .then((result) => {
  *     console.log("Fetched data:", result);
  *   })
@@ -45,7 +45,7 @@ const ProgramReadAsyncAction = createAsyncGraphQLAction(ProgramQueryRead)
 /**
  * A page content component for displaying detailed information about an program entity.
  *
- * This component utilizes `ProgramLargeCard` to create a structured layout and displays 
+ * This component utilizes `ProgramDetailsLargeCard` to create a structured layout and displays
  * the serialized representation of the `program` object within the card's content.
  *
  * @component
@@ -74,7 +74,7 @@ const ProgramPageContent = ({program}) => {
  * A lazy-loading component for displaying content of an program entity.
  *
  * This component is created using `createLazyComponent` and wraps `ProgramPageContent` to provide
- * automatic data fetching for the `program` entity. It uses the `ProgramReadAsyncAction` to fetch
+ * automatic data fetching for the `program` entity. It uses the `ProgramDetailsReadAsyncAction` to fetch
  * the entity data and dynamically injects it into the wrapped component as the `program` prop.
  *
  * @constant

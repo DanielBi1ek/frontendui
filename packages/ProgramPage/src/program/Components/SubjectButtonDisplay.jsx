@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { BackpackFill } from "react-bootstrap-icons";
+import { BackpackFill, PencilFill, TrashFill, GearWideConnected} from "react-bootstrap-icons";
 import Card from "react-bootstrap/Card";
 import { SubjectButton } from "../../../ProgramDetails/Components";
 
@@ -44,9 +44,9 @@ export const SubjectButtonCardCapsule = ({ title = "", children = null, id = nul
                             descriptionEn: "",
                         }}
                     >
-                        Insert Subject
+                        <PencilFill style={{margin:"4px"}}/>Insert Subject
                     </SubjectButton>
-                </div>
+                </div>;
             </Card.Header>
             <Card.Body>{children}</Card.Body>
         </Card>

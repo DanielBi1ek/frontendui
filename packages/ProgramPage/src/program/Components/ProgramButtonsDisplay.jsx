@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import {BackpackFill} from "react-bootstrap-icons";
+import { BackpackFill, PencilFill, TrashFill, Gear} from "react-bootstrap-icons";
 import { ProgramButton } from "../Components"
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
@@ -37,24 +37,24 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program}) =
                 <ProgramButton
                     operation="U"
                     program={program}>
-                    <button className="btn btn-sm btn-warning" style={{width: "115px", margin:"1px"}}>
-                        Edit Program
+                    <button className="btn btn-sm btn-warning" style={{width: "130px", margin:"1px"}}>
+                        <Gear style={{margin:"4px"}}/>Edit Program
                     </button>
                 </ProgramButton>
                 <ProgramButton
                     operation="C"
                     program={{name: "New Program", name_en: "New Program EN" }}
                     >
-                    <button className="btn btn-sm btn-primary" style={{width: "115px", margin:"1px"}}>
-                        Insert Program
+                    <button className="btn btn-sm btn-primary" style={{width: "145px", margin:"1px"}}>
+                        <PencilFill style={{margin:"4px"}}/>Insert Program
                     </button>
                 </ProgramButton>
                 <ProgramButton
                     operation="D"
                     program={program} // Ensure the 'id' key is included
                     >
-                    <button className="btn btn-sm btn-danger" style={{width: "115px", margin:"1px"}}>
-                        Delete Program
+                    <button className="btn btn-sm btn-danger" style={{width: "145px", margin:"1px"}}>
+                        <TrashFill style={{margin:"4px"}}/>Delete Program
                     </button>
                 </ProgramButton>
 

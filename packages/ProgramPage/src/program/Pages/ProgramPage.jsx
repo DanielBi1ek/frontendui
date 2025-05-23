@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import { useParams } from "react-router"
 import {BackpackFill, PersonFill} from "react-bootstrap-icons"
 
@@ -20,9 +20,10 @@ import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
 import {GuarantButton} from "../../../ProgramGuarant/src/Guarant/Components/GuarantCUDButton";
-
-
-
+import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
+import {Link} from "react-router-dom";
+import {SubjectButton} from "../../../ProgramDetails/Components";
+import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
 
 
 /**
@@ -48,7 +49,7 @@ import {GuarantButton} from "../../../ProgramGuarant/src/Guarant/Components/Guar
 
 // TODO presunout do components
 
-const ProgramPageContent = ({ program }) => {
+const ProgramPageContent = ({ program, subjects = [] }) => {
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
@@ -69,14 +70,42 @@ const ProgramPageContent = ({ program }) => {
 
                 </Row>
             </ButtonCardCapsule>
+
+            <SubjectButtonCardCapsule title={"Předměty:"}>
+                <Row>
+                    <LeftColumn>
+                        {program.subjects && program.subjects.length > 0 && (
+                            <div className="program-subjects">
+                                <ul>
+                                    {program.subjects.map((subject) => (
+                                        <li key={subject.id}> {/* Use a unique key */}
+                                            <Link to={`/subjects/${subject.id}`}>
+                                                {subject.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </LeftColumn>
+                    <MiddleColumn>
+                    </MiddleColumn>
+
+                </Row>
+
+            </SubjectButtonCardCapsule>
+
+
             <Card className="mt-3">
                 <Card.Header>
-                    <PersonFill/>
+                    <PersonFill color={"#0c6ffd"}/>
                     <strong> Přidání garantů</strong>
                 </Card.Header>
                 <Card.Body>
                 </Card.Body>
             </Card>
+
+
 
 
 

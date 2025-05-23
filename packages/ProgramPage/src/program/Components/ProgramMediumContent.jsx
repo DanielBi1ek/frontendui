@@ -23,7 +23,7 @@
  * </ProgramDetailsMediumContent>
  */
 
-export const ProgramMediumContent = ({ program }) => {
+export const ProgramMediumContent = ({ program } ) => {
     return (
         <div className="program-medium-content">
 
@@ -33,6 +33,9 @@ export const ProgramMediumContent = ({ program }) => {
                     <strong>Typ: </strong> {program.type.name}
                 </div>
             )}
+
+
+            {/* Display program coordinator */}
 
             {/* Display guarantors */}
             {program.guarantors && program.guarantors.length > 0 && (

@@ -11,11 +11,11 @@ import {
 export const Routes = [
     // UserRouterSegment
     {
-        path: "/program/:id",
+        path: "programs/program/:id",
         element: <ProgramPage />
     },
     {
-        path: "/program/program/view/:id",
+        path: "/programs/program/view/:id",
         element: <ProgramDetailsPage/>
     },
     ProgramRouterSegment,

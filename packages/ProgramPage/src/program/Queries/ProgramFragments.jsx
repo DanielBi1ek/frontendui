@@ -22,6 +22,11 @@ __typename
     type {
       name
     }
+    subjects {
+        id
+        name
+        }
+        
     guarantors {
       abbreviation
       name

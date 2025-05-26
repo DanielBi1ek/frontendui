@@ -13,7 +13,7 @@ import {
 } from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
 import {ProgramButton, ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
-import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
+import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
 import Row from "react-bootstrap/Row";
@@ -23,7 +23,7 @@ import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
 //import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {Link} from "react-router-dom";
 //import {SubjectButton} from "../../../ProgramDetails/Components";
-import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
+//import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
 
 
 /**
@@ -141,9 +141,8 @@ const ProgramPageContent = ({ program, subjects = [] }) => {
  */
 const ProgramPageContentLazy = ({ program }) => {
     const { error, loading, entity, fetch } = useAsyncAction(
-        program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Pass default object
-    );
+        ProgramReadAsyncAction
+        );    //ProgramsListQuery
     const [delayer] = useState(() => CreateDelayer());
 
     const handleChange = async (e) => {
@@ -157,7 +156,7 @@ const ProgramPageContentLazy = ({ program }) => {
     };
 
     return (
-        <>
+        <>ahoj
             {loading && <LoadingSpinner />}
             {error && <ErrorHandler errors={error} />}
             {entity && program?.id && (
@@ -189,8 +188,8 @@ const ProgramPageContentLazy = ({ program }) => {
  *
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
-export const ProgramPage = () => {
-    const { id } = useParams(); // Get the `id` from the URL
-    const program = id ? { id } : null; // Pass `null` if no `id`
-    return <ProgramPageContentLazy program={program} />;
+export const ProgramsPage = () => {
+    //const { id } = useParams(); // Get the `id` from the URL
+    //const program = id ? { id } : null; // Pass `null` if no `id`
+    return <ProgramPageContentLazy />;  //program={program}
 };

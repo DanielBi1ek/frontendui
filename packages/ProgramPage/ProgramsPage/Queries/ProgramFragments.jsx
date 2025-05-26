@@ -13,19 +13,6 @@ __typename
 `);
 
 
-export const ProgramListFragment = createQueryStrLazy(
-  `
-fragment ProgramLarge on ProgramGQLModel{
-  __typename
-  id
-  name
-  changedbyId
-  created
-  lastchange
-}
-
-`);
-
 
 export const ProgramMediumFragment = createQueryStrLazy(
     `

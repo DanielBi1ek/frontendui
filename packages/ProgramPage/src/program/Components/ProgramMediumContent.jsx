@@ -32,26 +32,9 @@ export const ProgramMediumContent = ({ program } ) => {
                 <div className="program-type">
                     <strong>Typ: </strong> {program.type.name}
                 </div>
+
             )}
 
-
-            {/* Display program coordinator */}
-
-            {/* Display guarantors */}
-            {program.guarantors && program.guarantors.length > 0 && (
-                <div className="program-guarantors">
-                    <strong>Guarantors:</strong>
-                    <ul>
-                        {program.guarantors.map((guarantor) => (
-                            <li key={guarantor.name}>
-                                {guarantor.abbreviation
-                                    ? `${guarantor.abbreviation} - ${guarantor.name}`
-                                    : guarantor.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </div>
     );
 };

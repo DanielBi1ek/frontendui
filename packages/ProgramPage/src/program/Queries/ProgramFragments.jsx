@@ -8,6 +8,7 @@ __typename
   id
   name
   lastchange
+  groupId
 }
 
 `);
@@ -22,16 +23,12 @@ __typename
     type {
       name
     }
+    groupId
     subjects {
         id
         name
         }
         
-    guarantors {
-      abbreviation
-      name
-      
-    }
   }
 `, ProgramLinkFragment);
 
@@ -52,6 +49,7 @@ query ProgramsListQuery {
   __typename
     id
     name
+    groupId
     type {
       name
     }
@@ -59,3 +57,4 @@ query ProgramsListQuery {
 }
 `
 );
+

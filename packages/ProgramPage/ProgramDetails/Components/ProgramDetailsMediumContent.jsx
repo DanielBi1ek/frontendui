@@ -43,6 +43,6 @@ export const ProgramDetailsMediumContent = ({ program }) => {
                 </div>
             )}
         </div>
-    );
-};
+    )
+}
 

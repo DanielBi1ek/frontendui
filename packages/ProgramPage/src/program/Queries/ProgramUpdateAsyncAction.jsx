@@ -3,21 +3,30 @@ import { ProgramLargeFragment } from "./ProgramFragments";
 
 const ProgramUpdateMutation = createQueryStrLazy(
 `
-mutation ProgramUpdateMutation($id: UUID!, $lastchange: DateTime!, $name: String, $name_en: String) {
-    result: programUpdate(
-        program: {id: $id, lastchange: $lastchange, name: $name, nameEn: $name_en}
-) {
-    ... on ProgramGQLModelUpdateError {
-            failed
-            msg
-            input
-            Entity {
-            ...ProgramLarge
-            }
-        }
-    ...ProgramLarge
+mutation ProgramUpdateMutation($id: UUID!, $lastchange: DateTime!, $name: String, $nameEn: String $groupId: UUID) {
+  result: programUpdate(
+    program: {
+      id: $id,
+      lastchange: $lastchange,
+      name: $name,
+      nameEn: $nameEn,
+        groupId: $groupId
     }
+  ) {
+    ... on ProgramGQLModelUpdateError {
+      failed
+      msg
+      input
+      Entity {
+        ...ProgramLarge
+      }
+    }
+    ...ProgramLarge
+  }
 }
-`, ProgramLargeFragment)
+`, ProgramLargeFragment);
 
 export const ProgramUpdateAsyncAction = createAsyncGraphQLAction(ProgramUpdateMutation)
+
+
+

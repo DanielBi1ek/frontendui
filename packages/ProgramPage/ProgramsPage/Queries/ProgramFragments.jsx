@@ -8,24 +8,10 @@ __typename
   id
   name
   lastchange
-  groupId
 }
 
 `);
 
-
-export const ProgramListFragment = createQueryStrLazy(
-  `
-fragment ProgramLarge on ProgramGQLModel{
-  __typename
-  id
-  name
-  changedbyId
-  created
-  lastchange
-}
-
-`);
 
 
 export const ProgramMediumFragment = createQueryStrLazy(
@@ -36,12 +22,16 @@ __typename
     type {
       name
     }
-    groupId
     subjects {
         id
         name
         }
         
+    guarantors {
+      abbreviation
+      name
+      
+    }
   }
 `, ProgramLinkFragment);
 
@@ -62,7 +52,6 @@ query ProgramsListQuery {
   __typename
     id
     name
-    groupId
     type {
       name
     }
@@ -70,4 +59,3 @@ query ProgramsListQuery {
 }
 `
 );
-

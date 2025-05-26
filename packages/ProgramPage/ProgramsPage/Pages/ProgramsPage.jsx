@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import { useParams } from "react-router"
 import {BackpackFill, PersonFill} from "react-bootstrap-icons"
-import {SearchInput} from "@hrbolek/uoisfrontend-shared";
+
 import {
     CardCapsule,
     CreateDelayer,
@@ -13,7 +13,7 @@ import {
 } from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
 import {ProgramButton, ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
-import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
+import { ProgramReadAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
 import { ProgramsListQuery } from "../Queries";
 import Row from "react-bootstrap/Row";
@@ -23,9 +23,7 @@ import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
 //import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {Link} from "react-router-dom";
 //import {SubjectButton} from "../../../ProgramDetails/Components";
-import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
-import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
-import {UserInputSearch} from "../Components/UserResults";
+//import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
 
 
 /**
@@ -49,14 +47,9 @@ import {UserInputSearch} from "../Components/UserResults";
  * <ProgramPageContent program={programEntity} />
  */
 
-// garance programu group id : b1bedec8-931f-11ed-9b95-0242ac110002
-    // garant role id:5f0c247e-931f-11ed-9b95-0242ac110002
-    //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
-const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
+// TODO presunout do components
 
-
-
-const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
+const ProgramPageContent = ({ program, subjects = [] }) => {
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
@@ -69,9 +62,9 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 <Row>
                     <LeftColumn>
                         <ProgramMediumCard program={program}/>
+
                     </LeftColumn>
                     <MiddleColumn>
-                        Garanti:
 
                     </MiddleColumn>
 
@@ -81,8 +74,19 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
             <SubjectButtonCardCapsule title={"Předměty:"}>
                 <Row>
                     <LeftColumn>
-                        <ProgramDetailsMediumContent program={program}/>
-
+                        {program.subjects && program.subjects.length > 0 && (
+                            <div className="program-subjects">
+                                <ul>
+                                    {program.subjects.map((subject) => (
+                                        <li key={subject.id}> {/* Use a unique key */}
+                                            <Link to={`/subjects/${subject.id}`}>
+                                                {subject.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </LeftColumn>
                     <MiddleColumn>
                     </MiddleColumn>
@@ -90,20 +94,25 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 </Row>
 
             </SubjectButtonCardCapsule>
-            <Card className="mb-3">
+
+
+            <Card className="mt-3">
                 <Card.Header>
-                    <h5>Přidání garanta</h5>
-                    <UserInputSearch
-                        program={program}
-                        groupId={program.groupId}
-                        onSelect={user => console.log(user)}
-
-
-                    />
+                    <PersonFill color={"#0c6ffd"}/>
+                    <strong> Přidání garantů</strong>
                 </Card.Header>
                 <Card.Body>
                 </Card.Body>
             </Card>
+
+
+
+
+
+
+
+
+
         </>
     );
 };
@@ -132,10 +141,8 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
  */
 const ProgramPageContentLazy = ({ program }) => {
     const { error, loading, entity, fetch } = useAsyncAction(
-        program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Pass default object
-    );
-
+        ProgramReadAsyncAction
+        );    //ProgramsListQuery
     const [delayer] = useState(() => CreateDelayer());
 
     const handleChange = async (e) => {
@@ -149,7 +156,7 @@ const ProgramPageContentLazy = ({ program }) => {
     };
 
     return (
-        <>
+        <>ahoj
             {loading && <LoadingSpinner />}
             {error && <ErrorHandler errors={error} />}
             {entity && program?.id && (
@@ -181,8 +188,8 @@ const ProgramPageContentLazy = ({ program }) => {
  *
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
-export const ProgramPage = () => {
-    const { id } = useParams(); // Get the `id` from the URL
-    const program = id ? { id } : null; // Pass `null` if no `id`
-    return <ProgramPageContentLazy program={program} />;
+export const ProgramsPage = () => {
+    //const { id } = useParams(); // Get the `id` from the URL
+    //const program = id ? { id } : null; // Pass `null` if no `id`
+    return <ProgramPageContentLazy />;  //program={program}
 };

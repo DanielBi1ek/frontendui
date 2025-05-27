@@ -23,6 +23,14 @@ fragment ProgramLarge on ProgramGQLModel{
   changedbyId
   created
   lastchange
+  guarantors {
+      id
+      roles {
+        user {
+          name
+        }
+      }
+    }
 }
 
 `);
@@ -37,6 +45,15 @@ __typename
       name
     }
     groupId
+    guarantors {
+      id
+      roles {
+        user {
+          name
+          surname
+        }
+      }
+    }
     subjects {
         id
         name

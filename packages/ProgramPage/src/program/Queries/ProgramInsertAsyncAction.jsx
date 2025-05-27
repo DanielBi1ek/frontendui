@@ -4,9 +4,9 @@ import { ProgramLargeFragment } from "./ProgramFragments";
 
 const ProgramInsertMutation = createQueryStrLazy(
     `
-mutation ProgramInsertMutation($id: UUID, $name: String! $groupId: UUID) {
+mutation ProgramInsertMutation($id: UUID, $name: String!, $groupId: UUID) {
   result: programInsert(
-    program: {id: $id, name: $name groupId: $groupId,}
+    program: {id: $id, name: $name, groupId: $groupId}
   ) {
     ... on InsertError {
       failed

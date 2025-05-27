@@ -12,20 +12,19 @@ import {
 
 } from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import {ProgramButton, ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
+import {ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
 import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
-import { ProgramsListQuery } from "../Queries";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
-//import {GuarantButton} from "../../../ProgramGuarant/src/Guarant/Components/GuarantCUDButton";
-//import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
-import {Link} from "react-router-dom";
-//import {SubjectButton} from "../../../ProgramDetails/Components";
 import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
 import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {UserInputSearch} from "../Components/UserResults";
+import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
+
+
+
 
 
 /**
@@ -54,7 +53,7 @@ import {UserInputSearch} from "../Components/UserResults";
     //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
 const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
-
+const uuid = () => crypto.randomUUID();
 
 const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
     const handleDone = (updatedProgram) => {
@@ -71,7 +70,9 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                         <ProgramMediumCard program={program}/>
                     </LeftColumn>
                     <MiddleColumn>
-                        Garanti:
+
+                        <GuarantMediumCard program={program}/>
+
 
                     </MiddleColumn>
 
@@ -82,7 +83,6 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 <Row>
                     <LeftColumn>
                         <ProgramDetailsMediumContent program={program}/>
-
                     </LeftColumn>
                     <MiddleColumn>
                     </MiddleColumn>
@@ -97,8 +97,6 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                         program={program}
                         groupId={program.groupId}
                         onSelect={user => console.log(user)}
-
-
                     />
                 </Card.Header>
                 <Card.Body>
@@ -130,11 +128,17 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
  *
  * <ProgramPageContentLazy program={programId} />
  */
-const ProgramPageContentLazy = ({ program }) => {
-    const { error, loading, entity, fetch } = useAsyncAction(
+
+
+const ProgramPageContentLazy = ({ program}) => {
+    const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Pass default object
+        program?.id ? {id: program.id} : {} // Pass default object
+
     );
+
+
+
 
     const [delayer] = useState(() => CreateDelayer());
 

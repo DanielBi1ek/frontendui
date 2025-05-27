@@ -35,6 +35,9 @@ export const ProgramMediumContent = ({ program } ) => {
 
             )}
 
+            {/* Display program guarantors */}
+
+
         </div>
     );
 };

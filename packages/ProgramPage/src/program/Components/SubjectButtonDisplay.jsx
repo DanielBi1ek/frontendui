@@ -4,7 +4,7 @@ import { BackpackFill, PencilFill, TrashFill, GearWideConnected} from "react-boo
 import Card from "react-bootstrap/Card";
 import { SubjectButton } from "../../../ProgramDetails/Components";
 
-export const SubjectButtonCardCapsule = ({ title = "", children = null, id = null }) => {
+export const SubjectButtonCardCapsule = ({ title = "", children = null, id = null, isEditable }) => {
     const { id: programId } = useParams(); // Get the program ID from the URL
 
     useEffect(() => {
@@ -32,6 +32,7 @@ export const SubjectButtonCardCapsule = ({ title = "", children = null, id = nul
                     <BackpackFill color="#0c6ffd" style={{ margin: "4px" }} />
                     {title}
                 </Card.Title>
+                {isEditable && (
                 <div>
                     <SubjectButton
                         className="btn btn-sm btn-primary"
@@ -48,7 +49,7 @@ export const SubjectButtonCardCapsule = ({ title = "", children = null, id = nul
                     >
                         <PencilFill style={{margin:"4px"}}/>Insert Subject
                     </SubjectButton>
-                </div>
+                </div>)}
             </Card.Header>
             <Card.Body>{children}</Card.Body>
         </Card>

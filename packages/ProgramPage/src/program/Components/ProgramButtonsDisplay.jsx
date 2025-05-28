@@ -10,7 +10,7 @@ import {GroupInsertAsyncAction} from "../Queries/GroupInsertAsycnAction";
 const uuid = () => crypto.randomUUID();
 
 
-export const ButtonCardCapsule = ({title="", children=null, id=null, program}) => {
+export const ButtonCardCapsule = ({title="", children=null, id=null, program, isEditable}) => {
     const { fetch: insertGroup, loading: groupLoading, error: groupError } = useAsyncAction(GroupInsertAsyncAction, {}, { deferred: true });
     const [createdGroupId, setCreatedGroupId] = useState(null);
     useEffect(() => {
@@ -57,6 +57,7 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program}) =
                     <BackpackFill color= "#0c6ffd" style={{margin:"4px"}}/>
                     {title}
                 </Card.Title>
+                {isEditable && (
                 <div>
                 <ProgramButton
                     operation="U"
@@ -90,7 +91,7 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program}) =
                     </button>
                 </ProgramButton>
 
-                </div>
+                </div>)}
             </Card.Header>
             <Card.Body>
                 {children}

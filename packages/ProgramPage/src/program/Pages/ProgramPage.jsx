@@ -55,7 +55,7 @@ const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
 const uuid = () => crypto.randomUUID();
 
-const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
+const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => {
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
@@ -63,7 +63,7 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
     return (
         <>
             <ProgramPageNavbar program={program}/>
-            <ButtonCardCapsule title={<ProgramLink program={program}/>} program={program}>
+            <ButtonCardCapsule title={<ProgramLink program={program}/>} program={program} isEditable = { isEditable }>
 
                 <Row>
                     <LeftColumn>
@@ -79,7 +79,7 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 </Row>
             </ButtonCardCapsule>
 
-            <SubjectButtonCardCapsule title={"Předměty:"}>
+            <SubjectButtonCardCapsule title={"Předměty:"} isEditable = { isEditable }>
                 <Row>
                     <LeftColumn>
                         <ProgramDetailsMediumContent program={program}/>
@@ -90,6 +90,7 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 </Row>
 
             </SubjectButtonCardCapsule>
+            {isEditable && (
             <Card className="mb-3">
                 <Card.Header>
                     <h5>Přidání garanta</h5>
@@ -101,7 +102,7 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
                 </Card.Header>
                 <Card.Body>
                 </Card.Body>
-            </Card>
+            </Card>)}
         </>
     );
 };
@@ -130,7 +131,7 @@ const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
  */
 
 
-const ProgramPageContentLazy = ({ program}) => {
+const ProgramPageContentLazy = ({ program, isEditable}) => {
     const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
         program?.id ? {id: program.id} : {} // Pass default object
@@ -158,7 +159,7 @@ const ProgramPageContentLazy = ({ program}) => {
             {loading && <LoadingSpinner />}
             {error && <ErrorHandler errors={error} />}
             {entity && program?.id && (
-                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur} />
+                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur} isEditable = { isEditable } />
             )}
             {entity && !program?.id && (
                 <div>
@@ -187,8 +188,8 @@ const ProgramPageContentLazy = ({ program}) => {
  *
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
-export const ProgramPage = () => {
+export const ProgramPage = ({ isEditable }) => {
     const { id } = useParams(); // Get the `id` from the URL
     const program = id ? { id } : null; // Pass `null` if no `id`
-    return <ProgramPageContentLazy program={program} />;
+    return <ProgramPageContentLazy program={program} isEditable = { isEditable } />;
 };

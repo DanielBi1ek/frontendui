@@ -16,19 +16,24 @@ import { ErrorHandler, LoadingSpinner } from '@hrbolek/uoisfrontend-shared';
 import { useAsyncAction } from '@hrbolek/uoisfrontend-gql-shared';
 import { ProgramLargeCard, ProgramMediumCard } from '../Components';
 import { ProgramButton } from '../Components/ProgramCUDButton';
-import { ProgramDetailsMediumContent } from '../../../ProgramDetails/Components';
+import {
+  ProgramDetailsMediumContent,
+  SubjectButton,
+} from '../../../ProgramDetails/Components';
 import { ProgramReadAsyncAction, ProgramListAsyncAction } from '../Queries';
 import ProgramPageNavbar from './ProgramPageNavbar';
-import { SubjectButtonCardCapsule } from '../Components/SubjectButtonDisplay';
 import { GuarantMediumCard } from '../Components/GuarantorMediumCard';
 import { UserInputSearch } from '../Components/UserResults';
-import {RoleInsertAsyncAction}from '../Queries/GuarrantInsertAsyncAction';
+import { RoleInsertAsyncAction } from '../Queries/GuarrantInsertAsyncAction';
+
+// ——————————————————————————————————————————————————————
 // Constants
+// ——————————————————————————————————————————————————————
 const GUARANTOR_ROLE_ID = '5f0c247e-931f-11ed-9b95-0242ac110002';
 
-/*************************************************
- *  REUSABLE ICON BUTTON WITH TOOLTIP
- *************************************************/
+// ——————————————————————————————————————————————————————
+// Helper: icon‑button with tooltip
+// ——————————————————————————————————————————————————————
 const IconBtn = ({ icon: Icon, tooltip, variant = 'outline-primary', ...props }) => (
   <OverlayTrigger placement="top" overlay={<Tooltip>{tooltip}</Tooltip>}>
     <Button variant={variant} size="sm" {...props}>
@@ -37,9 +42,9 @@ const IconBtn = ({ icon: Icon, tooltip, variant = 'outline-primary', ...props })
   </OverlayTrigger>
 );
 
-/*************************************************
- *  CARD WRAPPER COMPONENT
- *************************************************/
+// ——————————————————————————————————————————————————————
+// Generic section card
+// ——————————————————————————————————————————————————————
 const SectionCard = ({ title, icon: Icon, actions, children }) => (
   <Card className="shadow-sm border-0 mb-4">
     <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
@@ -53,37 +58,37 @@ const SectionCard = ({ title, icon: Icon, actions, children }) => (
   </Card>
 );
 
-/*************************************************
- *  TITLE COMPONENT (clean, no link)
- *************************************************/
+// Title component — no link
 const ProgramPageTitle = ({ program }) => (
-  <>
-    Detail programu — <span className="text-primary">{program.name}</span>
-  </>
+  <>Detail programu — <span className="text-primary">{program.name}</span></>
 );
 
-/*************************************************
- *  MAIN PAGE CONTENT (LOADED PROGRAM)
- *************************************************/
+// ——————————————————————————————————————————————————————
+// Loaded program content
+// ——————————————————————————————————————————————————————
 const ProgramPageContent = ({ program, isEditable }) => {
   const navigate = useNavigate();
-  /* ---------- Add guarantor off-canvas ---------- */
+
+  // state for guarantor off‑canvas
   const [showGuarantor, setShowGuarantor] = useState(false);
   const [selectedGuarant, setSelectedGuarant] = useState(null);
-    const { fetch: insertRole, loading: insertingRole } = useAsyncAction(RoleInsertAsyncAction, {}, { deferred: true });
+  const { fetch: insertRole, loading: insertingRole } = useAsyncAction(
+    RoleInsertAsyncAction,
+    {},
+    { deferred: true }
+  );
 
-  const openGuarantorPanel = () => setShowGuarantor(true);
-    const confirmGuarantor = async () => {
-        if (!selectedGuarant) return;
-        await insertRole({
-            userId: selectedGuarant.id,
-            groupId: program.groupId,
-            roletypeId: GUARANTOR_ROLE_ID,
-        });
-        setShowGuarantor(false);
-    };
+  const confirmGuarantor = async () => {
+    if (!selectedGuarant) return;
+    await insertRole({
+      userId: selectedGuarant.id,
+      groupId: program.groupId,
+      roletypeId: GUARANTOR_ROLE_ID,
+    });
+    setShowGuarantor(false);
+  };
 
-  /* ---------- back button (text + icon, placed above sections) ---------- */
+  // back to list
   const backButton = (
     <Button
       variant="outline-secondary"
@@ -96,7 +101,7 @@ const ProgramPageContent = ({ program, isEditable }) => {
     </Button>
   );
 
-  /* ---------- header action buttons ---------- */
+  // program CRUD actions
   const headerActions = isEditable && (
     <>
       <ProgramButton operation="U" program={program}>
@@ -114,27 +119,43 @@ const ProgramPageContent = ({ program, isEditable }) => {
     </>
   );
 
+  // subject add action
+  const subjectActions = isEditable && (
+    <SubjectButton
+      className="btn btn-sm btn-primary"
+      operation="C"
+      subject={{
+        name: 'Nový předmět',
+        nameEn: 'New subject',
+        programId: program.id,
+        groupId: '119086b2-d24d-43fe-89f3-d5365e5ad7e7',
+        description: '',
+        descriptionEn: '',
+      }}
+    >
+      <i className="bi bi-plus-circle" />
+    </SubjectButton>
+  );
+
   return (
-    <>      
+    <>
       {backButton}
-      {/* ===== Přehled programu ===== */}
+
+      {/* Přehled programu */}
       <SectionCard
-        title={<ProgramPageTitle program={program} /> }
+        title={<ProgramPageTitle program={program} />}
         icon={() => <i className="bi bi-briefcase-fill" />}
         actions={headerActions}
       >
         <Row className="g-4">
-          {/* --- základní údaje --- */}
           <Col md={6} lg={5} xl={4}>
             <ProgramMediumCard program={program} showType />
           </Col>
-
-          {/* --- garant (jeden) + add btn --- */}
           <Col>
             <div className="d-flex justify-content-between align-items-start mb-2">
               <h6 className="fw-semibold mb-0">Garant</h6>
               {isEditable && (
-                <IconBtn icon={() => <i className="bi bi-person-plus" />} tooltip="Přidat garanta" onClick={openGuarantorPanel} />
+                <IconBtn icon={() => <i className="bi bi-person-plus" />} tooltip="Přidat garanta" onClick={() => setShowGuarantor(true)} />
               )}
             </div>
             <GuarantMediumCard program={program} single />
@@ -142,14 +163,16 @@ const ProgramPageContent = ({ program, isEditable }) => {
         </Row>
       </SectionCard>
 
-      {/* ===== Předměty ===== */}
-      <SectionCard title="Předměty" icon={() => <i className="bi bi-journal-bookmark-fill" />}>
-        <SubjectButtonCardCapsule program={program} isEditable={isEditable}>
-          <ProgramDetailsMediumContent program={program} />
-        </SubjectButtonCardCapsule>
+      {/* Předměty */}
+      <SectionCard
+        title="Předměty"
+        icon={() => <i className="bi bi-journal-bookmark-fill" />}
+        actions={subjectActions}
+      >
+        <ProgramDetailsMediumContent program={program} />
       </SectionCard>
 
-      {/* ===== Off‑canvas: přidání garanta ===== */}
+      {/* Offcanvas guarantor */}
       <Offcanvas show={showGuarantor} onHide={() => setShowGuarantor(false)} placement="end">
         <Offcanvas.Header closeButton className="bg-primary text-white" closeVariant="white">
           <Offcanvas.Title>Přidat garanta</Offcanvas.Title>
@@ -182,9 +205,9 @@ const ProgramPageContent = ({ program, isEditable }) => {
   );
 };
 
-/*************************************************
- *  DATA WRAPPER (fetch program OR list)
- *************************************************/
+// ——————————————————————————————————————————————————————
+// Data wrapper
+// ——————————————————————————————————————————————————————
 const ProgramPageContentLazy = ({ programId, isEditable }) => {
   const { error, loading, entity } = useAsyncAction(
     programId ? ProgramReadAsyncAction : ProgramListAsyncAction,
@@ -211,9 +234,9 @@ const ProgramPageContentLazy = ({ programId, isEditable }) => {
   return <ProgramPageContent program={entity} isEditable={isEditable} />;
 };
 
-/*************************************************
- *  ROOT PAGE
- *************************************************/
+// ——————————————————————————————————————————————————————
+// Root page
+// ——————————————————————————————————————————————————————
 const ProgramPage = ({ isEditable = false, user }) => {
   const { id } = useParams();
   const programId = id ?? null;
@@ -228,4 +251,4 @@ const ProgramPage = ({ isEditable = false, user }) => {
 };
 
 export { ProgramPage };
-export default ProgramPage
+export default ProgramPage;

@@ -1,48 +1,44 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ListGroup, Alert } from 'react-bootstrap';
+
 /**
- * A component that displays medium-level content for an program entity.
- *
-
- * This component renders a label "ProgramDetailsMediumContent" followed by a serialized representation of the `program` object
- * and any additional child content. It is designed to handle and display information about an program entity object.
- *
- * @component
- * @param {Object} props - The properties for the ProgramDetailsMediumContent component.
- * @param {Object} props.program - The object representing the program entity.
- * @param {string|number} props.program.id - The unique identifier for the program entity.
- * @param {string} props.program.name - The name or label of the program entity.
- * @param {React.ReactNode} [props.children=null] - Additional content to render after the serialized `program` object.
- *
- * @returns {JSX.Element} A JSX element displaying the entity's details and optional content.
- *
- * @example
- * // Example usage:
- * const programEntity = { id: 123, name: "Sample Entity" };
- *
- * <ProgramDetailsMediumContent program={programEntity}>
- *   <p>Additional information about the entity.</p>
- * </ProgramDetailsMediumContent>
+ * ProgramDetailsMediumContent
+ * ----------------------------
+ * Přehled předmětů patřících k danému programu v čistém Bootstrap stylu.
+ * - Pokud program nemá předměty, zobrazí jemné upozornění.
+ * - Každá položka je `ListGroup.Item` s ikonou knihy a odkazem na detail předmětu.
  */
-import {Link} from "react-router-dom";
 
+const ProgramDetailsMediumContent = ({ program, children }) => {
+  const { subjects = [] } = program || {};
 
+  return (
+    <div>
+      {subjects.length === 0 ? (
+        <Alert variant="light" className="border-0 py-2 mb-0">
+          Žádné předměty nejsou přiřazeny k tomuto programu.
+        </Alert>
+      ) : (
+        <ListGroup variant="flush">
+          {subjects.map((subject) => (
+            <ListGroup.Item
+              key={subject.id}
+              as={Link}
+              to={`/subjects/${subject.id}`}
+              action
+              className="d-flex align-items-center gap-2 py-2 px-0"
+            >
+              <i className="bi bi-journal-text text-primary" />
+              <span>{subject.name}</span>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+      {children}
+    </div>
+  );
+};
 
-export const ProgramDetailsMediumContent = ({ program }) => {
-    return (
-        <div className="program-medium-content">
-            {program.subjects && program.subjects.length > 0 && (
-                <div className="program-subjects">
-                    <ul>
-                        {program.subjects.map((subject) => (
-                            <li key={subject.id}> {/* Use a unique key */}
-                                <Link to={`/subjects/${subject.id}`}>
-                                    {subject.name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-        </div>
-    )
-}
-
+export { ProgramDetailsMediumContent };
+export default ProgramDetailsMediumContent;

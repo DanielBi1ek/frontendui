@@ -3,8 +3,8 @@ import { ProgramLargeFragment } from "./ProgramFragments";
 
 const ProgramReadPageQuery = createQueryStrLazy(
 `
-query ProgramReadPageQuery($skip: Int, $limit: Int, $where: ProgramWhereInputFilter) {
-  result: programPage(skip: $skip, limit: $limit, where: $where) {
+query ProgramReadPageQuery {
+  result: programPage {
     ...ProgramLarge
   }
 }

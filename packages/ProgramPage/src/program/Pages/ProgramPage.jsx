@@ -151,9 +151,10 @@ const ProgramPageContentLazy = ({ program}) => {
         const data = e.target.value;
         const serverResponse = await delayer(() => fetch(data));
     };
-
+    
     return (
         <>
+
             {loading && <LoadingSpinner />}
             {error && <ErrorHandler errors={error} />}
             {entity && program?.id && (
@@ -161,7 +162,8 @@ const ProgramPageContentLazy = ({ program}) => {
             )}
             {entity && !program?.id && (
                 <div>
-                    {entity.programs.map((program) => (
+                    ahoj
+                    {entity.result.map((program) => (
                         <ProgramLargeCard key={program.id} program={program} />
                     ))}
                 </div>

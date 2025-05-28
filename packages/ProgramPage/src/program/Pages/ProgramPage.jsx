@@ -1,241 +1,188 @@
-import React, {useEffect, useState} from "react"
-import { useParams } from "react-router"
-import {BackpackFill, PersonFill} from "react-bootstrap-icons"
-import {SearchInput} from "@hrbolek/uoisfrontend-shared";
+import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import {
-    CardCapsule,
-    CreateDelayer,
-    ErrorHandler,
-    LeftColumn,
-    LoadingSpinner,
-    MiddleColumn
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  ButtonToolbar,
+  OverlayTrigger,
+  Tooltip,
+  Offcanvas,
+  Spinner,
+} from 'react-bootstrap';
+import { ErrorHandler, LoadingSpinner } from '@hrbolek/uoisfrontend-shared';
+import { useAsyncAction } from '@hrbolek/uoisfrontend-gql-shared';
+import { ProgramLargeCard, ProgramMediumCard, ProgramLink } from '../Components';
+import { ProgramDetailsMediumContent } from '../../../ProgramDetails/Components';
+import { ProgramReadAsyncAction, ProgramListAsyncAction } from '../Queries';
+import ProgramPageNavbar from './ProgramPageNavbar';
+import { SubjectButtonCardCapsule } from '../Components/SubjectButtonDisplay';
+import { GuarantMediumCard } from '../Components/GuarantorMediumCard';
+import { UserInputSearch } from '../Components/UserResults';
 
-} from "@hrbolek/uoisfrontend-shared"
-import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import {ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
-import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
-import { ProgramPageNavbar } from "./ProgramPageNavbar"
-import Row from "react-bootstrap/Row";
-import Card from "react-bootstrap/Card";
-import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
-import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
-import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
-import {UserInputSearch} from "../Components/UserResults";
-import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
-import {RoleInsertAsyncAction} from "../Queries/GuarrantInsertAsyncAction";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import { GuarrantMediumEditableContent } from "../Components/GuarrantMediumEditableContent";
+// Constants
+const GUARANTOR_ROLE_ID = '5f0c247e-931f-11ed-9b95-0242ac110002';
 
+/*************************************************
+ *  REUSABLE ICON BUTTON WITH TOOLTIP
+ *************************************************/
+const IconBtn = ({ icon: Icon, tooltip, variant = 'outline-primary', ...props }) => (
+  <OverlayTrigger placement="top" overlay={<Tooltip>{tooltip}</Tooltip>}>
+    <Button variant={variant} size="sm" {...props}>
+      <Icon />
+    </Button>
+  </OverlayTrigger>
+);
 
+/*************************************************
+ *  CARD WRAPPER COMPONENT
+ *************************************************/
+const SectionCard = ({ title, icon: Icon, actions, children }) => (
+  <Card className="shadow-sm border-0 mb-4">
+    <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
+      <div className="d-flex align-items-center gap-2 fw-semibold fs-5">
+        <Icon className="text-primary" />
+        <span>{title}</span>
+      </div>
+      {actions && <ButtonToolbar className="gap-2">{actions}</ButtonToolbar>}
+    </Card.Header>
+    <Card.Body>{children}</Card.Body>
+  </Card>
+);
 
-/**
- * A page content component for displaying detailed information about an program entity.
- *
- * This component utilizes `ProgramDetailsLargeCard` to create a structured layout and displays
- * the serialized representation of the `program` object within the card's content.
- *
- * @component
- * @param {Object} props - The properties for the ProgramPageContent component.
- * @param {Object} props.program - The object representing the program entity.
- * @param {string|number} props.program.id - The unique identifier for the program entity.
- * @param {string} props.program.name - The name or label of the program entity.
- *
- * @returns {JSX.Element} A JSX element rendering the page content for an program entity.
- *
- * @example
- * // Example usage:
- * const programEntity = { id: 123, name: "Sample Entity" };
- *
- * <ProgramPageContent program={programEntity} />
- */
+/*************************************************
+ *  MAIN PAGE CONTENT (LOADED PROGRAM)
+ *************************************************/
+const ProgramPageContent = ({ program, isEditable }) => {
+  /* ---------- Add guarantor off‑canvas ---------- */
+  const [showGuarantor, setShowGuarantor] = useState(false);
+  const [selectedGuarant, setSelectedGuarant] = useState(null);
+  const { fetch: insertRole, loading: insertingRole } = useAsyncAction(null, {}, { deferred: true });
 
-// garance programu group id : b1bedec8-931f-11ed-9b95-0242ac110002
-    // garant role id:5f0c247e-931f-11ed-9b95-0242ac110002
-    //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
-const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
+  const handleAddGuarantor = () => setShowGuarantor(true);
+  const confirmGuarantor = async () => {
+    if (!selectedGuarant) return;
+    await insertRole({
+      userId: selectedGuarant.id,
+      groupId: program.groupId,
+      roletypeId: GUARANTOR_ROLE_ID,
+    });
+    setShowGuarantor(false);
+  };
 
-const uuid = () => crypto.randomUUID();
+  /* ---------- header action buttons ---------- */
+  const headerActions = isEditable && (
+    <>
+      <IconBtn icon={() => <i className="bi bi-gear-fill" />} tooltip="Upravit program" />
+      <IconBtn icon={() => <i className="bi bi-plus-circle" />} tooltip="Nový program" />
+      <IconBtn icon={() => <i className="bi bi-trash" />} variant="outline-danger" tooltip="Smazat program" />
+    </>
+  );
 
-const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => {
-    const handleDone = (updatedProgram) => {
-        console.log("Operation completed:", updatedProgram);
-    };
-    const [showConfirm, setShowConfirm] = useState(false);
-    const [selectedGuarant, setSelectedGuarant] = useState(null);
-    const { fetch } = useAsyncAction(RoleInsertAsyncAction, {});
+  return (
+    <>
+      {/* ===== Přehled & garanti ===== */}
+      <SectionCard
+        title={<ProgramLink program={program} />}
+        icon={() => <i className="bi bi-briefcase-fill" />}
+        actions={headerActions}
+      >
+        <Row>
+          <Col md={6} lg={5} xl={4} className="mb-3 mb-md-0">
+            <ProgramMediumCard program={program} />
+          </Col>
+          <Col>
+            <GuarantMediumCard program={program} onAdd={handleAddGuarantor} isEditable={isEditable} />
+          </Col>
+        </Row>
+      </SectionCard>
 
-    const handleAddGuarantor = (user) => {
-        setSelectedGuarant(user);
-        setShowConfirm(true);
-    };
+      {/* ===== Předměty ===== */}
+      <SectionCard title="Předměty" icon={() => <i className="bi bi-journal-bookmark-fill" />}>
+        <SubjectButtonCardCapsule program={program} isEditable={isEditable}>
+          <ProgramDetailsMediumContent program={program} />
+        </SubjectButtonCardCapsule>
+      </SectionCard>
 
-    const handleConfirm = () => {
-        if (selectedGuarant) {
-            const userId = selectedGuarant.id;
-            const groupId = program.groupId;
-            const roletypeId = GUARANTOR_ROLE_ID;
-            fetch({ userId, groupId, roletypeId });
-        }
-        setShowConfirm(false);
-        setSelectedGuarant(null);
-    };
+      {/* ===== Off‑canvas: přidání garanta ===== */}
+      <Offcanvas show={showGuarantor} onHide={() => setShowGuarantor(false)} placement="end">
+        <Offcanvas.Header closeButton className="bg-primary text-white" closeVariant="white">
+          <Offcanvas.Title>Přidat garanta</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <UserInputSearch program={program} groupId={program.groupId} onSelect={setSelectedGuarant} />
+          {selectedGuarant && (
+            <div className="mt-3 d-flex align-items-center gap-3 p-3 border rounded">
+              <img
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(selectedGuarant.name)}`}
+                alt="avatar"
+                className="rounded-circle"
+                width={48}
+                height={48}
+              />
+              <strong>{selectedGuarant.name}</strong>
+            </div>
+          )}
+          <div className="d-flex justify-content-end gap-2 mt-4">
+            <Button variant="secondary" onClick={() => setShowGuarantor(false)}>
+              Zrušit
+            </Button>
+            <Button variant="primary" disabled={!selectedGuarant || insertingRole} onClick={confirmGuarantor}>
+              {insertingRole && <Spinner animation="border" size="sm" className="me-2" />}Potvrdit
+            </Button>
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
+  );
+};
 
-    const handleCancel = () => {
-        setShowConfirm(false);
-        setSelectedGuarant(null);
-    };
+/*************************************************
+ *  DATA WRAPPER (fetch program OR list)
+ *************************************************/
+const ProgramPageContentLazy = ({ programId, isEditable }) => {
+  const { error, loading, entity } = useAsyncAction(
+    programId ? ProgramReadAsyncAction : ProgramListAsyncAction,
+    programId ? { id: programId } : {}
+  );
 
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorHandler errors={error} />;
+
+  if (!programId) {
     return (
-        <>
-            <ProgramPageNavbar program={program}/>
-            <ButtonCardCapsule title={<ProgramLink program={program}/>} program={program} isEditable = { isEditable }>
-
-                <Row>
-                    <LeftColumn>
-                        <ProgramMediumCard program={program}/>
-                    </LeftColumn>
-                    <MiddleColumn>
-
-                        <GuarantMediumCard program={program}/>
-
-
-                    </MiddleColumn>
-
-                </Row>
-            </ButtonCardCapsule>
-
-            <SubjectButtonCardCapsule title={"Předměty:"} isEditable = { isEditable }>
-                <Row>
-                    <LeftColumn>
-                        <ProgramDetailsMediumContent program={program}/>
-                    </LeftColumn>
-                    <MiddleColumn>
-                    </MiddleColumn>
-
-                </Row>
-
-            </SubjectButtonCardCapsule>
-            {isEditable && (
-            <Card className="mb-3">
-                <Card.Header>
-                    <h5>Přidání garanta</h5>
-
-
-                    <UserInputSearch
-                        program={program}
-                        groupId={program.groupId}
-                        onSelect={handleAddGuarantor}
-                    />
-                    <Modal show={showConfirm} onHide={handleCancel}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm Guarantor Addition</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <GuarrantMediumEditableContent guarant={selectedGuarant}>
-                                <div>{selectedGuarant?.name}</div>
-                            </GuarrantMediumEditableContent>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleCancel}>
-                                Cancel
-                            </Button>
-                            <Button variant="primary" onClick={handleConfirm}>
-                                Confirm
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-
-                </Card.Header>
-                <Card.Body>
-                </Card.Body>
-            </Card>)}
-        </>
+      <Container fluid>
+        <Row className="g-4">
+          {entity?.result.map((p) => (
+            <Col key={p.id} lg={4} xl={3}>
+              <ProgramLargeCard program={p} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
     );
+  }
+
+  return <ProgramPageContent program={entity} isEditable={isEditable} />;
 };
 
-/**
- * A lazy-loading component for displaying content of an program entity.
- *
- * This component is created using `createLazyComponent` and wraps `ProgramPageContent` to provide
- * automatic data fetching for the `program` entity. It uses the `ProgramDetailsReadAsyncAction` to fetch
- * the entity data and dynamically injects it into the wrapped component as the `program` prop.
- *
- * @constant
- * @type {React.Component}
- *
- * @param {Object} props - The props for the lazy-loading component.
- * @param {string|number} props.program - The identifier of the program entity to fetch and display.
- *
- * @returns {JSX.Element} A component that fetches the `program` entity data and displays it
- * using `ProgramPageContent`, or shows loading and error states as appropriate.
- *
- * @example
- * // Example usage:
- * const programId = "12345";
- *
- * <ProgramPageContentLazy program={programId} />
- */
+/*************************************************
+ *  ROOT PAGE
+ *************************************************/
+const ProgramPage = ({ isEditable = false, user }) => {
+  const { id } = useParams();
+  const programId = id ?? null;
 
-
-const ProgramPageContentLazy = ({ program, isEditable}) => {
-    const { error, loading, entity, fetch } = useAsyncAction(
-        program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Always pass an object
-    );
-
-
-
-
-    const [delayer] = useState(() => CreateDelayer());
-
-    const handleChange = async (e) => {
-        const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
-    };
-
-    const handleBlur = async (e) => {
-        const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
-    };
-    
-    return (
-        <>
-
-            {loading && <LoadingSpinner />}
-            {error && <ErrorHandler errors={error} />}
-            {entity && program?.id && (
-                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur} isEditable = { isEditable } />
-            )}
-            {entity && !program?.id && (
-                <div>
-                    ahoj
-                    {entity.result.map((program) => (
-                        <ProgramLargeCard key={program.id} program={program} />
-                    ))}
-                </div>
-            )}
-        </>
-    );
+  return (
+    <ProgramPageNavbar user={user}>
+      <Container fluid className="py-4 px-4 px-lg-5">
+        <ProgramPageContentLazy programId={programId} isEditable={isEditable} />
+      </Container>
+    </ProgramPageNavbar>
+  );
 };
-/**
- * A page component for displaying lazy-loaded content of an program entity.
- *
- * This component extracts the `id` parameter from the route using `useParams`,
- * constructs an `program` object, and passes it to the `ProgramPageContentLazy` component.
- * The `ProgramPageContentLazy` component handles the lazy-loading and rendering of the entity's content.
- *
- * @component
- * @returns {JSX.Element} The rendered page component displaying the lazy-loaded content for the program entity.
- *
- * @example
- * // Example route setup:
- * <Route path="/program/:id" element={<ProgramPage />} />
- *
- * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
- */
-export const ProgramPage = ({ isEditable }) => {
-    const { id } = useParams(); // Get the `id` from the URL
-    const program = id ? { id } : null; // Pass `null` if no `id`
-    return <ProgramPageContentLazy program={program} isEditable = { isEditable } />;
-};
+
+export { ProgramPage };
+export default ProgramPage;

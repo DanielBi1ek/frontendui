@@ -155,11 +155,7 @@ const ProgramPageContentLazy = ({ program }) => {
         const data = e.target.value;
         const serverResponse = await delayer(() => fetch(data));
     };
-
-    useEffect(() => {
-        console.log("ENTITY →", entity);
-      }, [entity]);
-
+    
     return (
         <>
 

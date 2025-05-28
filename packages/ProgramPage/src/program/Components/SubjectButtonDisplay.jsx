@@ -34,6 +34,8 @@ export const SubjectButtonCardCapsule = ({ title = "", children = null, id = nul
                 </Card.Title>
                 <div>
                     <SubjectButton
+                        className="btn btn-sm btn-primary"
+                        style={{width: "145px", margin:"1px"}}
                         operation="C"
                         subject={{
                             name: "Nový předmět",
@@ -46,7 +48,7 @@ export const SubjectButtonCardCapsule = ({ title = "", children = null, id = nul
                     >
                         <PencilFill style={{margin:"4px"}}/>Insert Subject
                     </SubjectButton>
-                </div>;
+                </div>
             </Card.Header>
             <Card.Body>{children}</Card.Body>
         </Card>

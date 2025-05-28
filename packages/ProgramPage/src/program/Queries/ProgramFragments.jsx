@@ -8,6 +8,7 @@ __typename
   id
   name
   lastchange
+  groupId
 }
 
 `);
@@ -22,6 +23,14 @@ fragment ProgramList on ProgramGQLModel{
   changedbyId
   created
   lastchange
+  guarantors {
+      id
+      roles {
+        user {
+          name
+        }
+      }
+    }
 }
 
 `);
@@ -35,16 +44,21 @@ __typename
     type {
       name
     }
+    groupId
+    guarantors {
+      id
+      roles {
+        user {
+          name
+          surname
+        }
+      }
+    }
     subjects {
         id
         name
         }
         
-    guarantors {
-      abbreviation
-      name
-      
-    }
   }
 `, ProgramLinkFragment);
 
@@ -65,6 +79,7 @@ query ProgramsListQuery {
   __typename
     id
     name
+    groupId
     type {
       name
     }
@@ -72,3 +87,4 @@ query ProgramsListQuery {
 }
 `
 );
+

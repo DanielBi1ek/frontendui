@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import { useParams } from "react-router"
 import {BackpackFill, PersonFill} from "react-bootstrap-icons"
-
+import {SearchInput} from "@hrbolek/uoisfrontend-shared";
 import {
     CardCapsule,
     CreateDelayer,
@@ -12,18 +12,19 @@ import {
 
 } from "@hrbolek/uoisfrontend-shared"
 import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import {ProgramButton, ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
+import {ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
 import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
 import { ProgramPageNavbar } from "./ProgramPageNavbar"
-import { ProgramsListQuery } from "../Queries";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
-//import {GuarantButton} from "../../../ProgramGuarant/src/Guarant/Components/GuarantCUDButton";
-//import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
-import {Link} from "react-router-dom";
-//import {SubjectButton} from "../../../ProgramDetails/Components";
 import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
+import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
+import {UserInputSearch} from "../Components/UserResults";
+import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
+
+
+
 
 
 /**
@@ -47,9 +48,14 @@ import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
  * <ProgramPageContent program={programEntity} />
  */
 
-// TODO presunout do components
+// garance programu group id : b1bedec8-931f-11ed-9b95-0242ac110002
+    // garant role id:5f0c247e-931f-11ed-9b95-0242ac110002
+    //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
+const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
-const ProgramPageContent = ({ program, subjects = [] }) => {
+const uuid = () => crypto.randomUUID();
+
+const ProgramPageContent = ({ program, subjects, groupId = [] }) => {
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
@@ -62,9 +68,11 @@ const ProgramPageContent = ({ program, subjects = [] }) => {
                 <Row>
                     <LeftColumn>
                         <ProgramMediumCard program={program}/>
-
                     </LeftColumn>
                     <MiddleColumn>
+
+                        <GuarantMediumCard program={program}/>
+
 
                     </MiddleColumn>
 
@@ -74,19 +82,7 @@ const ProgramPageContent = ({ program, subjects = [] }) => {
             <SubjectButtonCardCapsule title={"Předměty:"}>
                 <Row>
                     <LeftColumn>
-                        {program.subjects && program.subjects.length > 0 && (
-                            <div className="program-subjects">
-                                <ul>
-                                    {program.subjects.map((subject) => (
-                                        <li key={subject.id}> {/* Use a unique key */}
-                                            <Link to={`/subjects/${subject.id}`}>
-                                                {subject.name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                        <ProgramDetailsMediumContent program={program}/>
                     </LeftColumn>
                     <MiddleColumn>
                     </MiddleColumn>
@@ -94,25 +90,18 @@ const ProgramPageContent = ({ program, subjects = [] }) => {
                 </Row>
 
             </SubjectButtonCardCapsule>
-
-
-            <Card className="mt-3">
+            <Card className="mb-3">
                 <Card.Header>
-                    <PersonFill color={"#0c6ffd"}/>
-                    <strong> Přidání garantů</strong>
+                    <h5>Přidání garanta</h5>
+                    <UserInputSearch
+                        program={program}
+                        groupId={program.groupId}
+                        onSelect={user => console.log(user)}
+                    />
                 </Card.Header>
                 <Card.Body>
                 </Card.Body>
             </Card>
-
-
-
-
-
-
-
-
-
         </>
     );
 };
@@ -139,11 +128,18 @@ const ProgramPageContent = ({ program, subjects = [] }) => {
  *
  * <ProgramPageContentLazy program={programId} />
  */
-const ProgramPageContentLazy = ({ program }) => {
-    const { error, loading, entity, fetch } = useAsyncAction(
+
+
+const ProgramPageContentLazy = ({ program}) => {
+    const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Pass default object
+        program?.id ? {id: program.id} : {} // Pass default object
+
     );
+
+
+
+
     const [delayer] = useState(() => CreateDelayer());
 
     const handleChange = async (e) => {

@@ -49,6 +49,8 @@ __typename
       id
       roles {
         user {
+        id
+        lastchange
           name
           surname
         }

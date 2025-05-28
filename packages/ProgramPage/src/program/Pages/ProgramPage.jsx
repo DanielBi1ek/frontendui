@@ -23,8 +23,9 @@ import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {UserInputSearch} from "../Components/UserResults";
 import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
 import {RoleInsertAsyncAction} from "../Queries/GuarrantInsertAsyncAction";
-
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { GuarrantMediumEditableContent } from "../Components/GuarrantMediumEditableContent";
 
 
 
@@ -60,15 +61,30 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
-    const { fetch, loading, error, data, entity, dispatchResult, read } = useAsyncAction(RoleInsertAsyncAction, {});
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [selectedGuarant, setSelectedGuarant] = useState(null);
+    const { fetch } = useAsyncAction(RoleInsertAsyncAction, {});
 
     const handleAddGuarantor = (user) => {
-        const userId = user.id;
-        const groupId = program.groupId;
-        const roletypeId = GUARANTOR_ROLE_ID;
-        fetch({ userId, groupId, roletypeId });
+        setSelectedGuarant(user);
+        setShowConfirm(true);
     };
 
+    const handleConfirm = () => {
+        if (selectedGuarant) {
+            const userId = selectedGuarant.id;
+            const groupId = program.groupId;
+            const roletypeId = GUARANTOR_ROLE_ID;
+            fetch({ userId, groupId, roletypeId });
+        }
+        setShowConfirm(false);
+        setSelectedGuarant(null);
+    };
+
+    const handleCancel = () => {
+        setShowConfirm(false);
+        setSelectedGuarant(null);
+    };
 
     return (
         <>
@@ -111,6 +127,25 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
                         groupId={program.groupId}
                         onSelect={handleAddGuarantor}
                     />
+                    <Modal show={showConfirm} onHide={handleCancel}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Confirm Guarantor Addition</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <GuarrantMediumEditableContent guarant={selectedGuarant}>
+                                <div>{selectedGuarant?.name}</div>
+                            </GuarrantMediumEditableContent>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleCancel}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" onClick={handleConfirm}>
+                                Confirm
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+
                 </Card.Header>
                 <Card.Body>
                 </Card.Body>

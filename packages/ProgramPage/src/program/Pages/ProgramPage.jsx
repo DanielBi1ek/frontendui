@@ -14,7 +14,8 @@ import {
 } from 'react-bootstrap';
 import { ErrorHandler, LoadingSpinner } from '@hrbolek/uoisfrontend-shared';
 import { useAsyncAction } from '@hrbolek/uoisfrontend-gql-shared';
-import { ProgramLargeCard, ProgramMediumCard, ProgramLink } from '../Components';
+import { ProgramLargeCard, ProgramMediumCard } from '../Components';
+import { ProgramButton } from '../Components/ProgramCUDButton';
 import { ProgramDetailsMediumContent } from '../../../ProgramDetails/Components';
 import { ProgramReadAsyncAction, ProgramListAsyncAction } from '../Queries';
 import ProgramPageNavbar from './ProgramPageNavbar';
@@ -44,7 +45,7 @@ const SectionCard = ({ title, icon: Icon, actions, children }) => (
     <Card.Header className="bg-white border-0 d-flex align-items-center justify-content-between">
       <div className="d-flex align-items-center gap-2 fw-semibold fs-5">
         <Icon className="text-primary" />
-        <span>{title}</span>
+        {typeof title === 'string' ? <span>{title}</span> : title}
       </div>
       {actions && <ButtonToolbar className="gap-2">{actions}</ButtonToolbar>}
     </Card.Header>
@@ -53,15 +54,24 @@ const SectionCard = ({ title, icon: Icon, actions, children }) => (
 );
 
 /*************************************************
+ *  TITLE COMPONENT (clean, no link)
+ *************************************************/
+const ProgramPageTitle = ({ program }) => (
+  <>
+    Detail programu — <span className="text-primary">{program.name}</span>
+  </>
+);
+
+/*************************************************
  *  MAIN PAGE CONTENT (LOADED PROGRAM)
  *************************************************/
 const ProgramPageContent = ({ program, isEditable }) => {
-  /* ---------- Add guarantor off‑canvas ---------- */
+  /* ---------- Add guarantor off-canvas ---------- */
   const [showGuarantor, setShowGuarantor] = useState(false);
   const [selectedGuarant, setSelectedGuarant] = useState(null);
   const { fetch: insertRole, loading: insertingRole } = useAsyncAction(null, {}, { deferred: true });
 
-  const handleAddGuarantor = () => setShowGuarantor(true);
+  const openGuarantorPanel = () => setShowGuarantor(true);
   const confirmGuarantor = async () => {
     if (!selectedGuarant) return;
     await insertRole({
@@ -75,26 +85,40 @@ const ProgramPageContent = ({ program, isEditable }) => {
   /* ---------- header action buttons ---------- */
   const headerActions = isEditable && (
     <>
-      <IconBtn icon={() => <i className="bi bi-gear-fill" />} tooltip="Upravit program" />
-      <IconBtn icon={() => <i className="bi bi-plus-circle" />} tooltip="Nový program" />
-      <IconBtn icon={() => <i className="bi bi-trash" />} variant="outline-danger" tooltip="Smazat program" />
+      <ProgramButton operation="U" program={program}>
+        <IconBtn icon={() => <i className="bi bi-gear-fill" />} tooltip="Upravit program" />
+      </ProgramButton>
+      <ProgramButton
+        operation="C"
+        program={{ name: 'Nový program', name_en: 'New Program', groupId: program.groupId }}
+      >
+        <IconBtn icon={() => <i className="bi bi-plus-circle" />} tooltip="Nový program" />
+      </ProgramButton>
+      <ProgramButton operation="D" program={program}>
+        <IconBtn icon={() => <i className="bi bi-trash" />} variant="outline-danger" tooltip="Smazat program" />
+      </ProgramButton>
     </>
   );
 
   return (
     <>
-      {/* ===== Přehled & garanti ===== */}
-      <SectionCard
-        title={<ProgramLink program={program} />}
-        icon={() => <i className="bi bi-briefcase-fill" />}
-        actions={headerActions}
-      >
-        <Row>
-          <Col md={6} lg={5} xl={4} className="mb-3 mb-md-0">
-            <ProgramMediumCard program={program} />
+      {/* ===== Přehled programu ===== */}
+      <SectionCard title={<ProgramPageTitle program={program} />} icon={() => <i className="bi bi-briefcase-fill" />} actions={headerActions}>
+        <Row className="g-4">
+          {/* --- základní údaje --- */}
+          <Col md={6} lg={5} xl={4}>
+            <ProgramMediumCard program={program} showType />
           </Col>
+
+          {/* --- garant (jeden) + add btn --- */}
           <Col>
-            <GuarantMediumCard program={program} onAdd={handleAddGuarantor} isEditable={isEditable} />
+            <div className="d-flex justify-content-between align-items-start mb-2">
+              <h6 className="fw-semibold mb-0">Garant</h6>
+              {isEditable && (
+                <IconBtn icon={() => <i className="bi bi-person-plus" />} tooltip="Přidat garanta" onClick={openGuarantorPanel} />
+              )}
+            </div>
+            <GuarantMediumCard program={program} single />
           </Col>
         </Row>
       </SectionCard>

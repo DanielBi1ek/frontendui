@@ -22,7 +22,7 @@ import ProgramPageNavbar from './ProgramPageNavbar';
 import { SubjectButtonCardCapsule } from '../Components/SubjectButtonDisplay';
 import { GuarantMediumCard } from '../Components/GuarantorMediumCard';
 import { UserInputSearch } from '../Components/UserResults';
-
+import {RoleInsertAsyncAction}from '../Queries/GuarrantInsertAsyncAction';
 // Constants
 const GUARANTOR_ROLE_ID = '5f0c247e-931f-11ed-9b95-0242ac110002';
 
@@ -70,18 +70,18 @@ const ProgramPageContent = ({ program, isEditable }) => {
   /* ---------- Add guarantor off-canvas ---------- */
   const [showGuarantor, setShowGuarantor] = useState(false);
   const [selectedGuarant, setSelectedGuarant] = useState(null);
-  const { fetch: insertRole, loading: insertingRole } = useAsyncAction(null, {}, { deferred: true });
+    const { fetch: insertRole, loading: insertingRole } = useAsyncAction(RoleInsertAsyncAction, {}, { deferred: true });
 
   const openGuarantorPanel = () => setShowGuarantor(true);
-  const confirmGuarantor = async () => {
-    if (!selectedGuarant) return;
-    await insertRole({
-      userId: selectedGuarant.id,
-      groupId: program.groupId,
-      roletypeId: GUARANTOR_ROLE_ID,
-    });
-    setShowGuarantor(false);
-  };
+    const confirmGuarantor = async () => {
+        if (!selectedGuarant) return;
+        await insertRole({
+            userId: selectedGuarant.id,
+            groupId: program.groupId,
+            roletypeId: GUARANTOR_ROLE_ID,
+        });
+        setShowGuarantor(false);
+    };
 
   /* ---------- back button (text + icon, placed above sections) ---------- */
   const backButton = (

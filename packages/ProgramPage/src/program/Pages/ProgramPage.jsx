@@ -17,7 +17,7 @@ import { useAsyncAction } from '@hrbolek/uoisfrontend-gql-shared';
 import { ProgramLargeCard } from '../Components';
 import { ProgramButton } from '../Components/ProgramCUDButton';
 import { ProgramDetailsMediumContent, SubjectButton } from '../../../ProgramDetails/Components';
-import { ProgramMediumContent } from '../Components/ProgramMediumContent';
+// import { ProgramMediumContent } from '../Components/ProgramMediumContent';
 import { ProgramReadAsyncAction, ProgramListAsyncAction } from '../Queries';
 import ProgramPageNavbar from './ProgramPageNavbar';
 import { UserInputSearch } from '../Components/UserResults';
@@ -73,7 +73,6 @@ const GuarantMediumContent = ({ program }) => {
       {guarantors.flatMap((g) =>
         g.roles?.map((role) => (
           <li key={role.id} className="d-flex align-items-center gap-2">
-            <i className="bi bi-person-circle text-primary" />
             {role.user?.name} {role.user?.surname}
           </li>
         ))
@@ -87,7 +86,6 @@ const TypeContent = ({ program }) => {
   return (
     <ul className="list-unstyled mb-0 small">
       <li className="d-flex align-items-center gap-2">
-        <i className="bi bi-tag-fill text-primary" />
         {program.type.name}
       </li>
     </ul>
@@ -137,10 +135,22 @@ const ProgramPageContent = ({ program, isEditable }) => {
       <h4 className="fw-semibold mb-3">Detail programu — <span className="text-primary">{program.name}</span></h4>
       <SectionCard title="Základní informace" icon={() => <i className="bi bi-info-circle-fill" />} actions={headerActions}>
         <Row className="g-4">
-          <Col md={6} lg={5} xl={4}><BasicInfoCard program={program} /></Col>
           <Col>
             <div className="d-flex justify-content-between align-items-start mb-2">
-              <h6 className="fw-semibold mb-0">Garant</h6>
+              <h6 className="fw-semibold mb-0">
+              <i className="bi bi-tag-fill text-primary" />
+               Typ studjiního programu
+              </h6>
+            </div>
+            <TypeContent program={program} />
+            </Col>
+            <Col>
+            
+            <div className="d-flex justify-content-between align-items-start mb-2">
+              <h6 className="fw-semibold mb-0">
+              <i className="bi bi-person-circle text-primary" />
+              Garant
+              </h6>
               {isEditable && <IconBtn icon={() => <i className="bi bi-person-plus" />} tooltip="Přidat garanta" onClick={() => setShowGuarantor(true)} />}
             </div>
             <GuarantMediumContent program={program} />

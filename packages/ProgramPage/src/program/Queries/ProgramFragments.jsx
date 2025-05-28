@@ -15,7 +15,7 @@ __typename
 
 export const ProgramListFragment = createQueryStrLazy(
   `
-fragment ProgramLarge on ProgramGQLModel{
+fragment ProgramList on ProgramGQLModel{
   __typename
   id
   name

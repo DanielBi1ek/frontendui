@@ -5,7 +5,7 @@ const ProgramListQuery = createQueryStrLazy(
 `
 query ProgramReadQuery{
   result: programPage{
-    ...ProgramLarge
+    ...ProgramList
   }
 }
 `, 

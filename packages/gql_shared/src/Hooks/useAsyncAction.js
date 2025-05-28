@@ -203,7 +203,8 @@ export const useAsyncAction = (AsyncAction, queryVariables, params = { deferred:
         ...state,
         read,
         // read: resource.read, // Suspense-compatible `read` function
-        entity: result,
+        //entity: result,
+        entity: result ?? state.dispatchResult,
     };
 };
 

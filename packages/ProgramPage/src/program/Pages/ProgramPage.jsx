@@ -22,6 +22,7 @@ import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
 import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {UserInputSearch} from "../Components/UserResults";
 import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
+import {RoleInsertAsyncAction} from "../Queries/GuarrantInsertAsyncAction";
 
 
 
@@ -59,6 +60,15 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
     const handleDone = (updatedProgram) => {
         console.log("Operation completed:", updatedProgram);
     };
+    const { fetch, loading, error, data, entity, dispatchResult, read } = useAsyncAction(RoleInsertAsyncAction, {});
+
+    const handleAddGuarantor = (user) => {
+        const userId = user.id;
+        const groupId = program.groupId;
+        const roletypeId = GUARANTOR_ROLE_ID;
+        fetch({ userId, groupId, roletypeId });
+    };
+
 
     return (
         <>
@@ -94,10 +104,12 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
             <Card className="mb-3">
                 <Card.Header>
                     <h5>Přidání garanta</h5>
+
+
                     <UserInputSearch
                         program={program}
                         groupId={program.groupId}
-                        onSelect={user => console.log(user)}
+                        onSelect={handleAddGuarantor}
                     />
                 </Card.Header>
                 <Card.Body>
@@ -132,10 +144,9 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
 
 
 const ProgramPageContentLazy = ({ program, isEditable}) => {
-    const {error, loading, entity, fetch} = useAsyncAction(
+    const { error, loading, entity, fetch } = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? {id: program.id} : {} // Pass default object
-
+        program?.id ? { id: program.id } : {} // Always pass an object
     );
 
 

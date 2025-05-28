@@ -38,6 +38,7 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program, is
         const groupParams = {
             id: uuid(),
             name: "Garance programu",
+            name_en: "Program Guarantee",
             grouptypeId: "b1bedec8-931f-11ed-9b95-0242ac110002"
         };
         try {
@@ -62,8 +63,13 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program, is
                 <ProgramButton
                     operation="U"
                     program={program}>
-                    <button className="btn btn-sm btn-warning" style={{width: "130px", margin:"1px"}}>
-                        <Gear style={{margin:"4px"}}/>Edit Program
+                    <button
+                        className="btn btn-sm btn-warning"
+                        style={{ width: "130px", margin: "1px" }}
+                        onClick={handleInsertGroupAndProgram}
+                        disabled={groupLoading}
+                    >
+                        <Gear style={{ margin: "4px" }} />Edit Program
                     </button>
                 </ProgramButton>
                 <ProgramButton
@@ -79,7 +85,7 @@ export const ButtonCardCapsule = ({title="", children=null, id=null, program, is
                         onClick={handleInsertGroupAndProgram}
                         disabled={groupLoading}
                     >
-                        <PencilFill style={{ margin: "4px" }} />Insert Group
+                        <PencilFill style={{ margin: "4px" }} />Insert Program
                     </button>
                 </ProgramButton>
                 <ProgramButton

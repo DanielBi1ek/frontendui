@@ -3,9 +3,9 @@ import { GroupLargeFragment } from "./GroupFragments";
 
 const GroupInsertMutation = createQueryStrLazy(
     `
-mutation GroupInsertMutation($id: UUID, $name: String!, $grouptypeId: UUID!) {
+mutation GroupInsertMutation($id: UUID, $name: String!, $nameEn: String, $grouptypeId: UUID!) {
   result: groupInsert(
-    group: {id: $id, name: $name, grouptypeId: $grouptypeId}
+    group: {id: $id, name: $name,nameEn: $nameEn, grouptypeId: $grouptypeId}
   ) {
     ... on InsertError {
       failed

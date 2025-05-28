@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import {
   Container,
   Row,
@@ -66,6 +66,7 @@ const ProgramPageTitle = ({ program }) => (
  *  MAIN PAGE CONTENT (LOADED PROGRAM)
  *************************************************/
 const ProgramPageContent = ({ program, isEditable }) => {
+  const navigate = useNavigate();
   /* ---------- Add guarantor off-canvas ---------- */
   const [showGuarantor, setShowGuarantor] = useState(false);
   const [selectedGuarant, setSelectedGuarant] = useState(null);
@@ -81,6 +82,19 @@ const ProgramPageContent = ({ program, isEditable }) => {
     });
     setShowGuarantor(false);
   };
+
+  /* ---------- back button (text + icon, placed above sections) ---------- */
+  const backButton = (
+    <Button
+      variant="outline-secondary"
+      size="sm"
+      className="d-inline-flex align-items-center gap-2 mb-3"
+      onClick={() => navigate('/programs')}
+    >
+      <i className="bi bi-arrow-left" />
+      <span>Zpět na seznam programů</span>
+    </Button>
+  );
 
   /* ---------- header action buttons ---------- */
   const headerActions = isEditable && (
@@ -101,9 +115,14 @@ const ProgramPageContent = ({ program, isEditable }) => {
   );
 
   return (
-    <>
+    <>      
+      {backButton}
       {/* ===== Přehled programu ===== */}
-      <SectionCard title={<ProgramPageTitle program={program} />} icon={() => <i className="bi bi-briefcase-fill" />} actions={headerActions}>
+      <SectionCard
+        title={<ProgramPageTitle program={program} /> }
+        icon={() => <i className="bi bi-briefcase-fill" />}
+        actions={headerActions}
+      >
         <Row className="g-4">
           {/* --- základní údaje --- */}
           <Col md={6} lg={5} xl={4}>
@@ -209,4 +228,4 @@ const ProgramPage = ({ isEditable = false, user }) => {
 };
 
 export { ProgramPage };
-export default ProgramPage;
+export default ProgramPage

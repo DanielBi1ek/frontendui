@@ -1,6 +1,3 @@
-import { PersonFill } from "react-bootstrap-icons"
-import { ProgramLink } from "./ProgramLink"
-import { ProgramCardCapsule } from "./ProgramCardCapsule"
 import { ProgramMediumContent } from "./ProgramMediumContent"
 
 /**

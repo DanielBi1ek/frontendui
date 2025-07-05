@@ -2,7 +2,9 @@ import Row from "react-bootstrap/Row"
 import { LeftColumn, MiddleColumn,} from "@hrbolek/uoisfrontend-shared"
 import { ProgramCardCapsule } from "./ProgramCardCapsule"
 import { ProgramMediumCard } from "./ProgramMediumCard"
-import { ProgramButton } from "./ProgramCUDButton";
+import {GuarantMediumCard} from "../../../Guarranting/src/Guarrant";
+import React from "react";
+
 
 /**
  * A large card component for displaying detailed content and layout for an program entity.
@@ -30,14 +32,15 @@ import { ProgramButton } from "./ProgramCUDButton";
  */
 
 
-export const ProgramLargeCard = ({program, children}) => {
+export const ProgramLargeCard = ({program, children, isEditable}) => {
     return (
-        <ProgramCardCapsule program={program} >
+        <ProgramCardCapsule program={program} isEditable={isEditable}>
             <Row>
                 <LeftColumn>
-                    <ProgramMediumCard program={program}/>
+                    <ProgramMediumCard program={program} isEditable = { isEditable }/>
                 </LeftColumn>
                 <MiddleColumn>
+                    <GuarantMediumCard program={program} isEditable = { isEditable }/>
                     {children}
 
                 </MiddleColumn>

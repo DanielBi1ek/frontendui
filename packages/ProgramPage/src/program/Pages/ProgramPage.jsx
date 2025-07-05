@@ -1,31 +1,11 @@
 import React, {useEffect, useState} from "react"
-import { useParams } from "react-router"
-import {BackpackFill, PersonFill} from "react-bootstrap-icons"
-import {SearchInput} from "@hrbolek/uoisfrontend-shared";
-import {
-    CardCapsule,
-    CreateDelayer,
-    ErrorHandler,
-    LeftColumn,
-    LoadingSpinner,
-    MiddleColumn
-
-} from "@hrbolek/uoisfrontend-shared"
-import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared"
-import {ProgramLargeCard, ProgramLink, ProgramMediumCard, ProgramMediumContent} from "../Components"
-import { ProgramReadAsyncAction, ProgramListAsyncAction } from "../Queries"
-import { ProgramPageNavbar } from "./ProgramPageNavbar"
-import Row from "react-bootstrap/Row";
-import Card from "react-bootstrap/Card";
-import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
-import {SubjectButtonCardCapsule} from "../Components/SubjectButtonDisplay";
-import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
-import {UserInputSearch} from "../Components/UserResults";
-import {GuarantMediumCard} from "../Components/GuarantorMediumCard";
-import {RoleInsertAsyncAction} from "../Queries/GuarrantInsertAsyncAction";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import { GuarrantMediumEditableContent } from "../Components/GuarrantMediumEditableContent";
+import {useParams} from "react-router"
+import {CreateDelayer, ErrorHandler, LoadingSpinner,} from "@hrbolek/uoisfrontend-shared"
+import {useAsyncAction} from "@hrbolek/uoisfrontend-gql-shared"
+import {ProgramLargeCard} from "../Components"
+import {ProgramReadAsyncAction, ProgramListAsyncAction} from "../Queries"
+import {ProgramPageNavbar} from "./ProgramPageNavbar"
+import {SubjectMediumContent, SubjectCardCapsule} from "../../../Subject/src/Subject";
 
 
 
@@ -53,103 +33,26 @@ import { GuarrantMediumEditableContent } from "../Components/GuarrantMediumEdita
 // garance programu group id : b1bedec8-931f-11ed-9b95-0242ac110002
     // garant role id:5f0c247e-931f-11ed-9b95-0242ac110002
     //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
-const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
+//const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
-const uuid = () => crypto.randomUUID();
-
-const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => {
-    const handleDone = (updatedProgram) => {
-        console.log("Operation completed:", updatedProgram);
-    };
-    const [showConfirm, setShowConfirm] = useState(false);
-    const [selectedGuarant, setSelectedGuarant] = useState(null);
-    const { fetch } = useAsyncAction(RoleInsertAsyncAction, {});
-
-    const handleAddGuarantor = (user) => {
-        setSelectedGuarant(user);
-        setShowConfirm(true);
-    };
-
-    const handleConfirm = () => {
-        if (selectedGuarant) {
-            const userId = selectedGuarant.id;
-            const groupId = program.groupId;
-            const roletypeId = GUARANTOR_ROLE_ID;
-            fetch({ userId, groupId, roletypeId });
-        }
-        setShowConfirm(false);
-        setSelectedGuarant(null);
-    };
-
-    const handleCancel = () => {
-        setShowConfirm(false);
-        setSelectedGuarant(null);
-    };
+const ProgramPageContent = ({program, isEditable, subjects, groupId = []}) => {
 
     return (
         <>
             <ProgramPageNavbar program={program}/>
-            <ButtonCardCapsule title={<ProgramLink program={program}/>} program={program} isEditable = { isEditable }>
+            <ProgramLargeCard program={program} isEditable={isEditable}>
+            </ProgramLargeCard>
 
-                <Row>
-                    <LeftColumn>
-                        <ProgramMediumCard program={program}/>
-                    </LeftColumn>
-                    <MiddleColumn>
-
-                        <GuarantMediumCard program={program}/>
+            <SubjectCardCapsule isEditable={isEditable}>
+                <SubjectMediumContent subjects={program.subjects} />
+            </SubjectCardCapsule>
 
 
-                    </MiddleColumn>
-
-                </Row>
-            </ButtonCardCapsule>
-
-            <SubjectButtonCardCapsule title={"Předměty:"} isEditable = { isEditable }>
-                <Row>
-                    <LeftColumn>
-                        <ProgramDetailsMediumContent program={program}/>
-                    </LeftColumn>
-                    <MiddleColumn>
-                    </MiddleColumn>
-
-                </Row>
-
-            </SubjectButtonCardCapsule>
-            {isEditable && (
-            <Card className="mb-3">
-                <Card.Header>
-                    <h5>Přidání garanta</h5>
 
 
-                    <UserInputSearch
-                        program={program}
-                        groupId={program.groupId}
-                        onSelect={handleAddGuarantor}
-                    />
-                    <Modal show={showConfirm} onHide={handleCancel}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm Guarantor Addition</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <GuarrantMediumEditableContent guarant={selectedGuarant}>
-                                <div>{selectedGuarant?.name}</div>
-                            </GuarrantMediumEditableContent>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleCancel}>
-                                Cancel
-                            </Button>
-                            <Button variant="primary" onClick={handleConfirm}>
-                                Confirm
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
 
-                </Card.Header>
-                <Card.Body>
-                </Card.Body>
-            </Card>)}
+
+
         </>
     );
 };
@@ -178,13 +81,11 @@ const ProgramPageContent = ({ program, isEditable, subjects, groupId = [] }) => 
  */
 
 
-const ProgramPageContentLazy = ({ program, isEditable}) => {
-    const { error, loading, entity, fetch } = useAsyncAction(
+const ProgramPageContentLazy = ({program, isEditable}) => {
+    const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? { id: program.id } : {} // Always pass an object
+        program?.id ? {id: program.id} : {} // Always pass an object
     );
-
-
 
 
     const [delayer] = useState(() => CreateDelayer());
@@ -198,20 +99,21 @@ const ProgramPageContentLazy = ({ program, isEditable}) => {
         const data = e.target.value;
         const serverResponse = await delayer(() => fetch(data));
     };
-    
+
     return (
         <>
 
-            {loading && <LoadingSpinner />}
-            {error && <ErrorHandler errors={error} />}
+            {loading && <LoadingSpinner/>}
+            {error && <ErrorHandler errors={error}/>}
             {entity && program?.id && (
-                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur} isEditable = { isEditable } />
+                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur}
+                                    isEditable={isEditable}/>
             )}
             {entity && !program?.id && (
                 <div>
                     ahoj
                     {entity.result.map((program) => (
-                        <ProgramLargeCard key={program.id} program={program} />
+                        <ProgramLargeCard key={program.id} program={program}/>
                     ))}
                 </div>
             )}
@@ -234,8 +136,8 @@ const ProgramPageContentLazy = ({ program, isEditable}) => {
  *
  * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
  */
-export const ProgramPage = ({ isEditable }) => {
-    const { id } = useParams(); // Get the `id` from the URL
-    const program = id ? { id } : null; // Pass `null` if no `id`
-    return <ProgramPageContentLazy program={program} isEditable = { isEditable } />;
+export const ProgramPage = ({isEditable}) => {
+    const {id} = useParams(); // Get the `id` from the URL
+    const program = id ? {id} : null; // Pass `null` if no `id`
+    return <ProgramPageContentLazy program={program} isEditable={isEditable}/>;
 };

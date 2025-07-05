@@ -1,6 +1,5 @@
 
 import {ProgramRouterSegment, ProgramPage} from "@ProgramPage";
-import {ProgramDetailsPage} from "@ProgramDetailsPage";
 //import {ProgramsPage} from "@ProgramsPage";
 import {
       createBrowserRouter,

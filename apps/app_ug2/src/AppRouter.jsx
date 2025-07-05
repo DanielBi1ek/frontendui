@@ -19,11 +19,11 @@ export const Routes = [
         element: <ProgramPage />
     },
     {
-        path: "/programs/program/:id/view",
+        path: "/programs/program/view/:id",
         element: <ProgramPage isEditable={ false } />
     },
     {
-        path: "/programs/program/:id/edit",
+        path: "/programs/program/edit/:id",
         element: <ProgramPage isEditable={ true } />
     },
     ProgramRouterSegment,

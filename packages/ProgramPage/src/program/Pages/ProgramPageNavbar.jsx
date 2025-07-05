@@ -1,134 +1,95 @@
-import React, { useEffect, useState } from 'react';
-import Nav from 'react-bootstrap/Nav';
-import { ProxyLink, useHash } from '@hrbolek/uoisfrontend-shared';
-import { useLocation } from 'react-router';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import Nav from 'react-bootstrap/Nav'
+import { ProxyLink, MyNavbar, useHash } from '@hrbolek/uoisfrontend-shared';
 
+import { ProgramURI } from '../Components'
 /**
- * Sidebar navigation with user avatar & name at bottom and a repositioned collapse button.
- * – Active segment comes from URL path (first slug) or hash.
- * – Avatar remains a circle, shrinks on collapse; name hides when collapsed.
+ * A navigation button component that generates a URL based on the program's ID and a specific segment.
+ * The button uses a `ProxyLink` to navigate while preserving hash and query parameters.
+ *
+ * ### Features:
+ * - Dynamically constructs the URL with a hash fragment pointing to the specified segment.
+ * - Displays a label for the navigation link.
+ * - Integrates seamlessly with `ProxyLink` for enhanced navigation.
+ *
+ * @component
+ * @param {Object} props - The properties for the TitleNavButton component.
+ * @param {Object} props.program - The program object containing details about the program.
+ * @param {string|number} props.program.id - The unique identifier for the program.
+ * @param {string} props.segment - The segment to append as a hash fragment in the URL.
+ * @param {string} props.label - The text to display as the label for the navigation button.
+ *
+ * @returns {JSX.Element} A styled navigation button linking to the constructed URL.
+ *
+ * @example
+ * // Example 1: Basic usage with a program and segment
+ * const program = { id: 123 };
+ * const segment = "details";
+ * const label = "View Details";
+ *
+ * <TitleNavButton program={program} segment={segment} label={label} />
+ * // Resulting URL: `/ug/program/view/123#details`
+ *
+ * @example
+ * // Example 2: Different segment and label
+ * <TitleNavButton program={{ id: 456 }} segment="settings" label="Program Settings" />
+ * // Resulting URL: `/ug/program/view/456#settings`
  */
-
-const LOGO_URL = 'https://upload.wikimedia.org/wikipedia/commons/d/da/Logo_of_UO.svg';
-const PLACEHOLDER_AVATAR = 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff';
-
-const segments = [
-  { segment: 'dashboard',    label: 'Přehled',     iconClass: 'bi-speedometer2' },
-  { segment: 'persons',      label: 'Osoby',       iconClass: 'bi-people-fill' },
-  { segment: 'programs',     label: 'Programy',    iconClass: 'bi-mortarboard-fill' },
-  { segment: 'applications', label: 'Přihlášky',   iconClass: 'bi-file-earmark-text' },
-  { segment: 'settings',     label: 'Nastavení',   iconClass: 'bi-gear-fill' },
-];
-
-const NavButton = ({ segment, label, iconClass, active, collapsed }) => (
-  <ProxyLink to={segment} className="text-decoration-none">
-    <Nav.Item as="li">
-      <Nav.Link
-        as="span"
-        className={[
-          'nav-btn d-flex align-items-center gap-3 px-3 py-2 rounded-3 fw-medium',
-          active ? 'active' : 'text-white',
-        ].join(' ')}
-      >
-        <i className={`bi ${iconClass}`}></i>
-        <span className={collapsed ? 'd-none' : ''}>{label}</span>
-      </Nav.Link>
-    </Nav.Item>
-  </ProxyLink>
-);
-
-const ProgramPageNavbar = ({ children, user = {} }) => {
-  const { fullName = 'Testovací Uživatel', avatarUrl = PLACEHOLDER_AVATAR } = user;
-  const [currentHash] = useHash();
-  const location = useLocation();
-  const [collapsed, setCollapsed] = useState(true);
-
-  const pathSegment = location.pathname.split('/').filter(Boolean)[0] || 'dashboard';
-
-  /* Inject scoped CSS */
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
-      :root { --sidebar-expanded: 14rem; --sidebar-collapsed: 4.5rem; }
-
-      .sidebar { width: var(--sidebar-expanded); transition: width .25s ease; }
-      .sidebar.sidebar--collapsed { width: var(--sidebar-collapsed); }
-
-      /* Logo */
-      .brand-logo { width: 6rem; transition: width .25s ease; }
-      .sidebar.sidebar--collapsed .brand-logo { width: 2.5rem; }
-
-      /* Collapse button styling */
-      .sidebar-toggle { --bs-border-opacity:0.2; }
-
-      /* Nav button */
-      .nav-btn { color: rgba(255,255,255,.9); transition: background .15s ease-in-out; }
-      .nav-btn:hover:not(.active) { background: rgba(255,255,255,.15); }
-      .nav-btn.active { background:#fff; color: var(--bs-primary); box-shadow: 0 .125rem .5rem rgba(0,0,0,.15); }
-
-      /* Center icons in collapsed */
-      .sidebar.sidebar--collapsed .nav { align-items: center; }
-      .sidebar.sidebar--collapsed .nav-btn { justify-content: center; padding-left:0; padding-right:0; gap:0; }
-
-      /* Avatar */
-      .avatar { width:3rem; height:3rem; object-fit:cover; border-radius:50%; transition: width .25s ease, height .25s ease; }
-      .sidebar.sidebar--collapsed .avatar { width:2rem; height:2rem; }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-  const toggleCollapse = () => setCollapsed((c) => !c);
-  const isActive = (seg) => seg === pathSegment || currentHash === `#${seg}`;
-
+const TitleNavButton = ({ program, segment, label, ...props }) => {
+  // const urlbase = (segment) => `/programs/program/${segment}/${program?.id}`;
+  const urlbase = (segment) => `${ProgramURI}${program?.id}#${segment}`;
   return (
-    <div className="d-flex">
-      {/* Sidebar */}
-      <nav className={`sidebar bg-primary text-white sticky-top d-flex flex-column align-items-stretch${collapsed ? ' sidebar--collapsed' : ''}`}>
-        {/* Logo */}
-        <a href="/" className="d-flex justify-content-center py-4 text-decoration-none">
-          <img src={LOGO_URL} alt="UOIS logo" className="brand-logo" />
-        </a>
-
-        {/* Collapse / expand button just under logo */}
-        <div className="d-flex justify-content-center mb-3 px-2">
-          <button
-            type="button"
-            className="btn btn-outline-light btn-sm sidebar-toggle d-flex align-items-center justify-content-center"
-            onClick={toggleCollapse}
-          >
-            <i className={`bi ${collapsed ? 'bi-chevron-double-right' : 'bi-chevron-double-left'}`}></i>
-          </button>
-        </div>
-
-        {/* Navigation list */}
-        <Nav as="ul" className="flex-column gap-1 px-2" variant="pills">
-          {segments.map(({ segment, label, iconClass }) => (
-            <NavButton
-              key={segment}
-              segment={segment}
-              label={label}
-              iconClass={iconClass}
-              active={isActive(segment)}
-              collapsed={collapsed}
-            />
-          ))}
-        </Nav>
-
-        {/* User info at bottom */}
-        <div className="mt-auto d-flex flex-column align-items-center px-3 pb-4 gap-2">
-          <img src={avatarUrl} alt={fullName} className="avatar" />
-          <span className={collapsed ? 'd-none' : 'text-white text-center fw-semibold'} style={{lineHeight:'1.2em'}}>{fullName}</span>
-        </div>
-      </nav>
-
-      {/* Main content */}
-      <main className="flex-grow-1 p-4 min-vh-100 bg-light">{children}</main>
-    </div>
+      <Nav.Link as={"span"} {...props}>
+        <ProxyLink to={urlbase(segment)}>{label}</ProxyLink>
+      </Nav.Link>
   );
 };
 
-export { ProgramPageNavbar };
-export default ProgramPageNavbar;
+/**
+ * Renders the navigation bar for an Program page.
+ *
+ * This component uses a custom hook, `useHash()`, to determine the current hash
+ * and highlights the active segment. It displays a navigation bar (using MyNavbar)
+ * with several segments (e.g. "history", "roles", "graph"), each rendered as a
+ * TitleNavButton. The segments are hardcoded in this component and only rendered
+ * if an `program` object is provided.
+ *
+ * @component
+ * @param {Object} props - The component properties.
+ * @param {Object} props.program - The program entity object that provides context for the page.
+ * @param {string|number} props.program.id - The unique identifier for the program.
+ * @param {Function} props.onSearchChange - Callback function to handle changes in the search input.
+ *
+ * @returns {JSX.Element} The rendered ProgramPageNavbar component.
+ *
+ * @example
+ * // Example usage:
+ * const program = { id: 123, ... };
+ * <ProgramPageNavbar program={program} onSearchChange={handleSearchChange} />
+ */
+export const ProgramPageNavbar = ({ program, onSearchChange }) => {
+  const [currentHash, setHash] = useHash(); // Use the custom hook to manage hash
+
+  const segments = [
+    { segment: 'history', label: 'Historie'},
+    // { segment: 'permissions', label: 'Práva' },
+    { segment: 'roles', label: 'Role' },
+    // { segment: 'library', label: 'Knihovna' },
+    { segment: 'graph', label: 'Stavy' },
+  ]
+  return (
+      <div className='screen-only'>
+        <MyNavbar onSearchChange={onSearchChange} >
+          {program && segments.map(({ segment, label }) => (
+              <Nav.Item key={segment} >
+                <TitleNavButton
+                    program={program}
+                    segment={segment}
+                    label={label}
+                    className={segment===currentHash?"active":""} aria-current={segment===currentHash?"page":undefined}
+                />
+              </Nav.Item>
+          ))}
+        </MyNavbar>
+      </div>
+  );
+};

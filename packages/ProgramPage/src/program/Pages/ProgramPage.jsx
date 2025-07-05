@@ -43,7 +43,10 @@ const ProgramPageContent = ({program, isEditable, subjects, groupId = []}) => {
             <ProgramLargeCard program={program} isEditable={isEditable}>
             </ProgramLargeCard>
 
-            <SubjectCardCapsule isEditable={isEditable}>
+            <SubjectCardCapsule
+                isEditable={isEditable}
+                subject={{ programId: program.id }} // Ensure programId is always present
+            >
                 <SubjectMediumContent subjects={program.subjects} />
             </SubjectCardCapsule>
 

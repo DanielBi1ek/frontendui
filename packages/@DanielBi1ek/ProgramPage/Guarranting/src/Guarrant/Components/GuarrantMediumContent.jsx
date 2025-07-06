@@ -1,135 +1,141 @@
 // packages/ProgramPage/Program/program/Components/GuarantorMediumContent.jsx
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { UserInputSearch } from "./UserResults";
-import { GuarrantMediumEditableContent } from "./GuarrantMediumEditableContent";
-import { useAsyncAction } from "@hrbolek/uoisfrontend-gql-shared";
-import { RoleInsertAsyncAction } from "../Queries";
+import {UserInputSearch} from "./UserResults";
+import {GuarrantMediumEditableContent} from "./GuarrantMediumEditableContent";
+import {useAsyncAction} from "@hrbolek/uoisfrontend-gql-shared";
+import {RoleInsertAsyncAction} from "../Queries";
 import {GuarrantButton} from "./GuarrantCUDButton";
-import { Trash } from "react-bootstrap-icons";
+import {Check, PersonFill, Trash} from "react-bootstrap-icons";
+
 const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
+
 export const GuarantMediumContent = ({ program, isEditable }) => {
-    const [showConfirm, setShowConfirm] = useState(false);
     const [selectedGuarant, setSelectedGuarant] = useState(null);
-    const { fetch } = useAsyncAction(RoleInsertAsyncAction, {});
+    const [guarantors, setGuarantors] = useState([]);
 
-    const guarantors = Array.isArray(program.guarantors)
-        ? program.guarantors
-        : program.guarantors
-            ? [program.guarantors]
-            : [];
+    useEffect(() => {
+        setGuarantors(
+            Array.isArray(program.guarantors)
+                ? program.guarantors
+                : program.guarantors
+                    ? [program.guarantors]
+                    : []
+        );
+    }, [program.guarantors]);
 
-    const handleAddGuarantor = (user) => {
-        setSelectedGuarant(user);
-        setShowConfirm(true);
+
+    const handleGuarantorAdded = (result) => {
+        if (selectedGuarant) {
+            setGuarantors(prev => [
+                ...prev,
+                {
+                    id: selectedGuarant.id,
+                    roles: [
+                        {
+                            user: {
+                                name: selectedGuarant.name || selectedGuarant.fullname?.split(" ")[0] || "",
+                                surname: selectedGuarant.surname || selectedGuarant.fullname?.split(" ").slice(1).join(" ") || "",
+                            }
+                        }
+                    ]
+                }
+            ]);
+        }
+        setSelectedGuarant(null);
     };
 
 
-
-    const handleConfirm = async () => {
-        if (!selectedGuarant) return;
-        // Call the insert mutation
-        await fetch({
-            userId: selectedGuarant.id,
-            groupId: program.groupId,
-            roletypeId: GUARANTOR_ROLE_ID,
-        });
-        setShowConfirm(false);
-        setSelectedGuarant(null);
-        // Optionally, trigger a refresh of the parent data here
-    };
-
-    const handleCancel = () => {
-        setShowConfirm(false);
-        setSelectedGuarant(null);
+    const handleGuarantorDeleted = (guarant) => {
+        setGuarantors(prev =>
+            prev.filter(g =>
+                !g.roles.some(role => role.id === guarant.id)
+            )
+        );
     };
 
     return (
         <div>
             <h5>Garanti programu:</h5>
-            {guarantors.map((guarantor) => (
-                <div key={guarantor.id} className="guarantor-item" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    {guarantor.roles && guarantor.roles.length > 0 ? (
-                        guarantor.roles.map((role, idx) => (
-                            console.log("Delete mapping:", {
-                                id: role.id,
-                                lastchange: role.lastchange,
-                                name: role.user?.name,
-                                surname: role.user?.surname
-                            }),
-
-
-                            <span key={idx} style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                    {role.user?.name}
-                                {role.user?.surname ? ` ${role.user.surname}` : ""}
-                                {isEditable && (
-                                    <GuarrantButton
-                                        operation="D"
-                                        guarant={{
-                                            id: role.id,
-                                            lastchange: role.lastchange,
-                                            name: role.user?.name,
-                                            surname: role.user?.surname
-                                        }}
-                                        onDone={handleConfirm}
-                                        style={{
-                                            background: "transparent",
-                                            color: "#dc3545", // red
-                                            border: "none",
-                                            borderRadius: "50%",
-                                            width: "28px",
-                                            height: "28px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            cursor: "pointer",
-                                            fontSize: "1.2rem",
-                                            transition: "background 0.2s",
-                                            padding: 0,
-                                        }}
-                                        className="guarant-delete-btn"
-                                        title="Remove guarantor"
-                                    >
-                                        <Trash />
-                                    </GuarrantButton>
-                                )}
+            {guarantors.length > 0 ? (
+                guarantors.map((guarantor) => (
+                    <div key={guarantor.id} className="guarantor-item"
+                         style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        {guarantor.roles && guarantor.roles.length > 0 ? (
+                            guarantor.roles.map((role, idx) => (
+                                <span key={idx} style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                                    <PersonFill color="#0d6efd" style={{ marginRight: "0.25rem" }} />
+                                    {role.user?.name}
+                                    {role.user?.surname ? ` ${role.user.surname}` : ""}
+                                    {isEditable && (
+                                        <GuarrantButton
+                                            operation="D"
+                                            guarant={{
+                                                id: role.id,
+                                                lastchange: role.lastchange,
+                                                name: role.user?.name,
+                                                surname: role.user?.surname
+                                            }}
+                                            onDone={() => handleGuarantorDeleted(role)}
+                                            style={{
+                                                background: "transparent",
+                                                color: "#dc3545",
+                                                border: "none",
+                                                borderRadius: "50%",
+                                                width: "28px",
+                                                height: "28px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                cursor: "pointer",
+                                                fontSize: "1.2rem",
+                                                transition: "background 0.2s",
+                                                padding: 0,
+                                            }}
+                                            className="guarant-delete-btn"
+                                            title="Remove guarantor"
+                                        >
+                                            <Trash />
+                                        </GuarrantButton>
+                                    )}
+                                </span>
+                            ))
+                        ) : null}
+                    </div>
+                ))
+            ) : (
+                <span style={{ display: "inline-block", marginBottom: "1rem" }}>
+                    Žádní garanti programu nejsou přiřazeni.
                 </span>
-                        ))
-                    ) : (
-                        <span style={{ display: "inline-block", marginBottom: "1rem" }}>
-                Žádní garanti programu nejsou přiřazeni.
-            </span>
-                    )}
-                </div>
-            ))}
+            )}
             {isEditable && (
                 <>
                     <UserInputSearch
                         program={program}
                         groupId={program.groupId}
-                        onSelect={handleAddGuarantor}
+                        onSelect={setSelectedGuarant}
                     />
-                    <Modal show={showConfirm} onHide={handleCancel}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm Guarantor Addition</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <GuarrantMediumEditableContent guarant={selectedGuarant} operation="C">
-                                <div>{selectedGuarant?.name}</div>
-                            </GuarrantMediumEditableContent>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleCancel}>
-                                Cancel
-                            </Button>
-                            <Button variant="primary" onClick={handleConfirm}>
-                                Confirm
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
+                    {selectedGuarant && (
+                        <GuarrantButton
+                            operation="C"
+                            guarant={{
+                                userId: selectedGuarant.id,
+                                name: selectedGuarant.name || selectedGuarant.fullname?.split(" ")[0] || "",
+                                surname: selectedGuarant.surname || selectedGuarant.fullname?.split(" ").slice(1).join(" ") || "",
+                                groupId: program.groupId,
+                                roletypeId: GUARANTOR_ROLE_ID,
+                            }}
+                            onDone={handleGuarantorAdded}
+                            className="btn btn-primary"
+                            style={{ marginTop: 8 }}
+                        >
+                            Přidat garanta
+                            <Check style={{ marginLeft: "0.5rem" }} />
+                        </GuarrantButton>
+                    )}
                 </>
             )}
         </div>

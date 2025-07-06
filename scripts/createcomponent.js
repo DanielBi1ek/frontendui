@@ -112,10 +112,10 @@ async function prompt(question) {
       process.exit(1);
     }
 
-    // Define the root destination directory (under packages/{destRelative}/src)
+    // Define the root destination directory (under packages/{destRelative}/Program)
     const destRoot = path.resolve(__dirname, '..', 'packages', destRelative, 'src');
 
-    // Define source directory: in our _empty package the templates are under packages/_empty/src/Empty
+    // Define source directory: in our _empty package the templates are under packages/_empty/Program/Empty
     const srcDir = path.resolve(__dirname, '..', 'packages', '_empty', 'src', 'Empty');
     console.log(`Source directory: ${srcDir}`);
 

@@ -117,7 +117,7 @@ async function copyDirectory(srcDir, destDir, newName) {
       console.error("No component set name provided. Exiting.");
       process.exit(1);
     }
-    // Check if the package's src directory contains a directory named componentName
+    // Check if the package's Program directory contains a directory named componentName
     const componentDir = path.resolve(packageDir, 'src', componentName);
     try {
       const stat = await fs.stat(componentDir);

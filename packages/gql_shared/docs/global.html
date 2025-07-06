@@ -7,7 +7,7 @@
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script Program="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
@@ -352,7 +352,8 @@
 
 
 <div class="description">
-    Creates a fetch function for a given GraphQL query string. The resulting functionaccepts query variables, constructs the request payload, and initiates the fetch request.
+    Creates a fetch function for a given GraphQL query string. The resulting function
+accepts query variables, constructs the request payload, and initiates the fetch request.
 </div>
 
 
@@ -407,7 +408,28 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Define a GraphQL queryconst query = `  query GetUser($id: ID!) {    user(id: $id) {      id      name      email    }  }`;// Create a fetch functionconst fetchUser = CreateFetchQuery(query, {  headers: {    Authorization: 'Bearer some-token'  }});// Use the fetch function with query variablesfetchUser({ id: '12345' })  .then(response => console.log(response))  .catch(err => console.error(err));</code></pre>
+    <pre class="prettyprint"><code>// Define a GraphQL query
+const query = `
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      email
+    }
+  }
+`;
+
+// Create a fetch function
+const fetchUser = CreateFetchQuery(query, {
+  headers: {
+    Authorization: 'Bearer some-token'
+  }
+});
+
+// Use the fetch function with query variables
+fetchUser({ id: '12345' })
+  .then(response => console.log(response))
+  .catch(err => console.error(err));</code></pre>
 
 
 
@@ -543,7 +565,8 @@
 
 
 <div class="description">
-    Slice for managing messages in the Redux store.Provides actions and reducers to add, delete, and handle messages.
+    Slice for managing messages in the Redux store.
+Provides actions and reducers to add, delete, and handle messages.
 </div>
 
 
@@ -667,7 +690,8 @@
 
 
 <div class="description">
-    Wrapper function for `fetch` that provides an intermediary layer for server communication.Includes options for custom headers, body modifications, and response handling.
+    Wrapper function for `fetch` that provides an intermediary layer for server communication.
+Includes options for custom headers, body modifications, and response handling.
 </div>
 
 
@@ -722,7 +746,14 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>authorizedFetch2('/api/users', {  headers: { Authorization: 'Bearer token' },  body: JSON.stringify({ query: '{ users { id, name } }' })}, {  replaceUUID: true,  overridenPath: '/api/custom'}).then(data => console.log(data))  .catch(err => console.error(err));</code></pre>
+    <pre class="prettyprint"><code>authorizedFetch2('/api/users', {
+  headers: { Authorization: 'Bearer token' },
+  body: JSON.stringify({ query: '{ users { id, name } }' })
+}, {
+  replaceUUID: true,
+  overridenPath: '/api/custom'
+}).then(data => console.log(data))
+  .catch(err => console.error(err));</code></pre>
 
 
 
@@ -734,7 +765,8 @@
 
 
 <div class="description">
-    Middleware-like function to process a specific vector attribute from a GraphQL query result.Extracts the relevant data, identifies the vector attribute, and dispatches an action to update the attribute.
+    Middleware-like function to process a specific vector attribute from a GraphQL query result.
+Extracts the relevant data, identifies the vector attribute, and dispatches an action to update the attribute.
 </div>
 
 
@@ -789,7 +821,25 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Define the vector processing middlewareconst processVectorMiddleware = processVectorAttributeFromGraphQLResult("events");// Example GraphQL responseconst jsonResult = {  data: {    result: {      id: 1,      name: "Item 1",      events: [        { id: 101, name: "Event 1" },        { id: 102, name: "Event 2" }      ]    }  }};// Use the middleware to process the resultprocessVectorMiddleware(jsonResult)(dispatch, getState)(next);</code></pre>
+    <pre class="prettyprint"><code>// Define the vector processing middleware
+const processVectorMiddleware = processVectorAttributeFromGraphQLResult("events");
+
+// Example GraphQL response
+const jsonResult = {
+  data: {
+    result: {
+      id: 1,
+      name: "Item 1",
+      events: [
+        { id: 101, name: "Event 1" },
+        { id: 102, name: "Event 2" }
+      ]
+    }
+  }
+};
+
+// Use the middleware to process the result
+processVectorMiddleware(jsonResult)(dispatch, getState)(next);</code></pre>
 
 
 
@@ -856,7 +906,30 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Usage with a Redux asynchronous actionconst AsyncAction = (variables) => async (dispatch) => {    const response = await fetch('/api/items', { method: 'POST', body: JSON.stringify(variables) });    const json = await response.json();    return json;};const MyComponent = () => {    const [item, resultPromise, state] = useFreshItem({ id: '123', filter: 'active' }, AsyncAction);    useEffect(() => {        resultPromise.then(() => {            console.log("Fetch complete:", state);        });    }, [resultPromise]);    return (        &lt;div>            {state.loading &amp;&amp; &lt;p>Loading...&lt;/p>}            {state.errors &amp;&amp; &lt;p>Error: {state.errors}&lt;/p>}            {item &amp;&amp; &lt;p>Item: {item.name}&lt;/p>}        &lt;/div>    );};</code></pre>
+    <pre class="prettyprint"><code>// Usage with a Redux asynchronous action
+const AsyncAction = (variables) => async (dispatch) => {
+    const response = await fetch('/api/items', { method: 'POST', body: JSON.stringify(variables) });
+    const json = await response.json();
+    return json;
+};
+
+const MyComponent = () => {
+    const [item, resultPromise, state] = useFreshItem({ id: '123', filter: 'active' }, AsyncAction);
+
+    useEffect(() => {
+        resultPromise.then(() => {
+            console.log("Fetch complete:", state);
+        });
+    }, [resultPromise]);
+
+    return (
+        &lt;div>
+            {state.loading &amp;&amp; &lt;p>Loading...&lt;/p>}
+            {state.errors &amp;&amp; &lt;p>Error: {state.errors}&lt;/p>}
+            {item &amp;&amp; &lt;p>Item: {item.name}&lt;/p>}
+        &lt;/div>
+    );
+};</code></pre>
 
 
 
@@ -1202,7 +1275,8 @@
 
 
 <div class="description">
-    Creates a dispatchable async action from a GraphQL query.Supports chaining multiple middleware-like functions for post-fetch processing.
+    Creates a dispatchable async action from a GraphQL query.
+Supports chaining multiple middleware-like functions for post-fetch processing.
 </div>
 
 
@@ -1312,7 +1386,8 @@
                 </td>
             
 
-            <td class="description last">Additional parameters for the query (e.g., headers), or a middleware function. If it is a middleware function, it is added to the middleware chain.</td>
+            <td class="description last">Additional parameters for the query (e.g., headers), 
+or a middleware function. If it is a middleware function, it is added to the middleware chain.</td>
         </tr>
 
     
@@ -1349,7 +1424,8 @@
                 </td>
             
 
-            <td class="description last">Additional middleware functions to process the result.Each middleware must be a function that returns a higher-order function `(result) => (dispatch, getState) => next(result)`.</td>
+            <td class="description last">Additional middleware functions to process the result.
+Each middleware must be a function that returns a higher-order function `(result) => (dispatch, getState) => next(result)`.</td>
         </tr>
 
     
@@ -1526,7 +1602,36 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const exampleQuery = `  query ExampleQuery($id: ID!) {    user(id: $id) {      id      name    }  }`;// Example middlewaresconst logMiddleware = (result) => (dispatch, getState) => (next) => {  console.log("Middleware log:", result);  return next(result);};const processMiddleware = (result) => (dispatch, getState) => (next) => {  const processedResult = { ...result, processed: true };  return next(processedResult);};// Create an async actionconst fetchAction = createAsyncGraphQLAction(  exampleQuery,  { headers: { Authorization: "Bearer token" } },  logMiddleware,  processMiddleware);// Dispatch the action with query variablesdispatch(fetchAction({ id: "12345" }));</code></pre>
+    <pre class="prettyprint"><code>const exampleQuery = `
+  query ExampleQuery($id: ID!) {
+    user(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+// Example middlewares
+const logMiddleware = (result) => (dispatch, getState) => (next) => {
+  console.log("Middleware log:", result);
+  return next(result);
+};
+
+const processMiddleware = (result) => (dispatch, getState) => (next) => {
+  const processedResult = { ...result, processed: true };
+  return next(processedResult);
+};
+
+// Create an async action
+const fetchAction = createAsyncGraphQLAction(
+  exampleQuery,
+  { headers: { Authorization: "Bearer token" } },
+  logMiddleware,
+  processMiddleware
+);
+
+// Dispatch the action with query variables
+dispatch(fetchAction({ id: "12345" }));</code></pre>
 
 
 
@@ -1544,7 +1649,12 @@
 
 
 <div class="description">
-    Middleware function for processing GraphQL query results and dispatching item update actions.This middleware processes the JSON result of a GraphQL query, extracts the relevant data,and dispatches actions to update items in the Redux store. If the result contains an arrayof items, each item is dispatched individually. If the result is a single object, it isdispatched directly. If no valid result is found, a warning is logged.
+    Middleware function for processing GraphQL query results and dispatching item update actions.
+
+This middleware processes the JSON result of a GraphQL query, extracts the relevant data,
+and dispatches actions to update items in the Redux store. If the result contains an array
+of items, each item is dispatched individually. If the result is a single object, it is
+dispatched directly. If no valid result is found, a warning is logged.
 </div>
 
 
@@ -1690,7 +1800,16 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const jsonResult = {  data: {    result: [      { id: 1, name: "Item 1" },      { id: 2, name: "Item 2" }    ]  }};updateItemsFromGraphQLResult(jsonResult)(dispatch, getState)(next);</code></pre>
+    <pre class="prettyprint"><code>const jsonResult = {
+  data: {
+    result: [
+      { id: 1, name: "Item 1" },
+      { id: 2, name: "Item 2" }
+    ]
+  }
+};
+
+updateItemsFromGraphQLResult(jsonResult)(dispatch, getState)(next);</code></pre>
 
 
 

@@ -21,7 +21,7 @@ function preserveCaseReplace(text, target, replacement) {
   });
 }
 
-// Copy file from src to dest, while replacing text content accordingly
+// Copy file from Program to dest, while replacing text content accordingly
 async function copyAndProcessFile(srcPath, destPath, newName) {
   let content = await fs.readFile(srcPath, 'utf8');
   // Replace "Empty" fragments in file content using preserveCaseReplace.
@@ -79,7 +79,7 @@ async function prompt(question) {
     // Build full destination path; assuming current working directory is monorepo root.
     const destDir = path.resolve(__dirname, '..', 'packages', destRelative, 'src', newName);
     
-    // Define source: in our _empty package the templates are under /packages/_empty/src/Empty
+    // Define source: in our _empty package the templates are under /packages/_empty/Program/Empty
     const srcDir = path.resolve(__dirname, '..', 'packages', '_empty', 'src', 'Empty');
 
     console.log(`Copying from: ${srcDir}`);

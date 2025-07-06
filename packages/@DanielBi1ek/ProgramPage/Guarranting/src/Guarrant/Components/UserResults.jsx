@@ -35,19 +35,31 @@ const UserSearchAsyncAction = createAsyncGraphQLAction(
     hookGraphQLResult(jsonResult => jsonResult?.data?.result || [])
 )
 
-export const UserInputSearchResult = ({result, onSelect}) => {
+export const UserInputSearchResult = ({result, onSelect, selectedId}) => {
     return (
-        <span className="btn btn-outline-primary btn-sm" onClick={() => onSelect(result)}>{result?.fullname}</span>
+        <span
+            className={`btn btn-outline-primary btn-sm${selectedId === result?.id ? " active text-white bg-primary border-primary" : ""}`}
+            style={{ marginRight: 4, marginBottom: 4 }}
+            onClick={() => onSelect(result)}
+        >
+        {result?.fullname}
+    </span>
     )
 }
 
-export const UserInputSearchResults = ({results, onSelect}) => {
+export const UserInputSearchResults = ({results, onSelect, selectedId}) => {
+
     return (
-        <>{results.map(
-            result => <UserInputSearchResult key={result?.id} result={result} onSelect={onSelect}/>
-        )}
+        <>{results.map(result => (
+            <UserInputSearchResult
+                key={result?.id}
+                result={result}
+                onSelect={onSelect}
+                selectedId={selectedId}
+            />
+        ))}
         </>
-    )
+    );
 }
 
 export const UserInputSearch = ({onSelect}) => {
@@ -89,7 +101,7 @@ export const UserInputSearch = ({onSelect}) => {
             {/* <hr />
             {JSON.stringify(state)} */}
             <hr />
-            <UserInputSearchResults results={state.results} onSelect={_onSelect}/>
+            <UserInputSearchResults results={state.results} onSelect={_onSelect} selectedId={state.selected?.id} />
         </div>
     )
 }

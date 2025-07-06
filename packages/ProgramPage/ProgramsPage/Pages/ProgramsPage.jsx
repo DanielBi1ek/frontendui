@@ -19,7 +19,7 @@ import { ProgramsListQuery } from "../Queries";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import {ButtonCardCapsule} from "../Components/ProgramButtonsDisplay";
-//import {GuarantButton} from "../../../ProgramGuarant/src/Guarant/Components/GuarantCUDButton";
+//import {GuarantButton} from "../../../ProgramGuarant/Program/Guarant/Components/GuarantCUDButton";
 //import {ProgramDetailsMediumContent} from "../../../ProgramDetails/Components";
 import {Link} from "react-router-dom";
 //import {SubjectButton} from "../../../ProgramDetails/Components";

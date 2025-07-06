@@ -45,12 +45,12 @@ export default defineConfig({
     preserveSymlinks: true, // Prevents breaking symbolic links, useful for monorepos
     alias: {
       // Define aliases for modules, resolving them to specific paths
-      "@hrbolek/uoisfrontend-shared": path.resolve(__dirname, "../../packages/shared/src"),
-      "@hrbolek/uoisfrontend-gql-shared": path.resolve(__dirname, "../../packages/gql_shared/src"),
-      "@hrbolek/uoisfrontend-ug": path.resolve(__dirname, "../../packages/ug/src"),
-      "@hrbolek/uoisfrontend-granting": path.resolve(__dirname, "../../packages/granting/src"),
-      "@hrbolek/uoisfrontend-admissions": path.resolve(__dirname, "../../packages/admissions/src"),
-      "@hrbolek/uoisfrontend-requests": path.resolve(__dirname, "../../packages/requests/src"),
+      "@hrbolek/uoisfrontend-shared": path.resolve(__dirname, "../../packages/shared/Program"),
+      "@hrbolek/uoisfrontend-gql-shared": path.resolve(__dirname, "../../packages/gql_shared/Program"),
+      "@hrbolek/uoisfrontend-ug": path.resolve(__dirname, "../../packages/ug/Program"),
+      "@hrbolek/uoisfrontend-granting": path.resolve(__dirname, "../../packages/granting/Program"),
+      "@hrbolek/uoisfrontend-admissions": path.resolve(__dirname, "../../packages/admissions/Program"),
+      "@hrbolek/uoisfrontend-requests": path.resolve(__dirname, "../../packages/requests/Program"),
     },
   },
 

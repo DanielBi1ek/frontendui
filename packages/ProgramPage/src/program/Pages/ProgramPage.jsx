@@ -36,29 +36,23 @@ import {SubjectMediumContent, SubjectCardCapsule} from "../../../Subject/src/Sub
 //const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
 const ProgramPageContent = ({program, isEditable, subjects, groupId = []}) => {
-
-    return (
-        <>
-            <ProgramPageNavbar program={program}/>
-            <ProgramLargeCard program={program} isEditable={isEditable}>
-            </ProgramLargeCard>
-
-            <SubjectCardCapsule
-                isEditable={isEditable}
-                subject={{ programId: program.id }} // Ensure programId is always present
-            >
-                <SubjectMediumContent subjects={program.subjects} />
-            </SubjectCardCapsule>
-
-
-
-
-
-
-
-        </>
-    );
-};
+        return (
+            <>
+                <ProgramPageNavbar program={program}/>
+                <ProgramLargeCard program={program} isEditable={isEditable} />
+                <SubjectCardCapsule
+                    isEditable={isEditable}
+                    subject={{ programId: program.id }}
+                >
+                    {Array.isArray(program.subjects) && program.subjects.length > 0 ? (
+                        <SubjectMediumContent subjects={program.subjects} />
+                    ) : (
+                        <div style={{color: "gray", margin: "1rem"}}>No subjects found.</div>
+                    )}
+                </SubjectCardCapsule>
+            </>
+        );
+    };
 
 /**
  * A lazy-loading component for displaying content of an program entity.
@@ -87,32 +81,54 @@ const ProgramPageContent = ({program, isEditable, subjects, groupId = []}) => {
 const ProgramPageContentLazy = ({program, isEditable}) => {
     const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? {id: program.id} : {} // Always pass an object
+        program?.id ? {id: program.id} : {}
     );
-
 
     const [delayer] = useState(() => CreateDelayer());
 
     const handleChange = async (e) => {
         const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
+        await delayer(() => fetch(data));
     };
 
     const handleBlur = async (e) => {
         const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
+        await delayer(() => fetch(data));
     };
+
+    // Debug: log entity to see what you get after deletion
+    useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log("Program entity after fetch:", entity);
+    }, [entity]);
+
+    const programEntity = entity?.result ?? entity;
+
+    const isEntityMissing = program?.id && (
+        !programEntity ||
+        !programEntity.id ||
+        (
+            programEntity.name === null &&
+            programEntity.lastchange === null &&
+            programEntity.groupId === null &&
+            programEntity.type === null &&
+            (!Array.isArray(programEntity.subjects) || programEntity.subjects.length === 0)
+        )
+    );
 
     return (
         <>
-
             {loading && <LoadingSpinner/>}
             {error && <ErrorHandler errors={error}/>}
-            {entity && program?.id && (
-                <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur}
-                                    isEditable={isEditable}/>
+            {isEntityMissing && !loading && !error && (
+                <div style={{color: "red", fontWeight: "bold", margin: "2rem"}}>
+                    Program does not exist.
+                </div>
             )}
-            {entity && !program?.id && (
+            {programEntity && program?.id && programEntity.id && !isEntityMissing && (
+                <ProgramPageContent program={programEntity} isEditable={isEditable}/>
+            )}
+            {entity && !program?.id && entity.result && (
                 <div>
                     ahoj
                     {entity.result.map((program) => (

@@ -43,13 +43,13 @@ export default defineConfig({
       // Define aliases for modules, resolving them to specific paths
       "@hrbolek/uoisfrontend-shared": path.resolve(__dirname, "../../packages/shared/src"),
       "@hrbolek/uoisfrontend-gql-shared": path.resolve(__dirname, "../../packages/gql_shared/src"),
-      "@hrbolek/uoisfrontend-ug": path.resolve(__dirname, "../../packages/ug/src"),
+      "@hrbolek/uoisfrontend-ug": path.resolve(__dirname, "../../packages/ug/Program"),
       "@hrbolek/uoisfrontend-granting": path.resolve(__dirname, "../../packages/granting/src"),
       "@hrbolek/uoisfrontend-admissions": path.resolve(__dirname, "../../packages/admissions/src"),
       "@hrbolek/uoisfrontend-requests": path.resolve(__dirname, "../../packages/requests/src"),
-      "@ProgramPage": path.resolve(__dirname, "../../packages/ProgramPage/src/program"),
+      "@ProgramPage": path.resolve(__dirname, "../../packages/@DanielBi1ek/ProgramPage/Program/program"),
       "@hrbolek/uoisfrontend-zp": path.resolve(__dirname, "../../packages/z_pack/src"),
-      "@PrograGuarant": path.resolve(__dirname, "../../packages/ProgramGuarant/src/guarant"),
+      "@PrograGuarant": path.resolve(__dirname, "../../packages/ProgramGuarant/Program/guarant"),
     },
   },
 

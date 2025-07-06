@@ -1,0 +1,14 @@
+{
+  "name": "programpage",
+  "version": "1.0.0",
+  "main": "/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+
+  "@hrbolek/uoisfrontend-shared": "*",
+    "@hrbolek/uoisfrontend-gql-shared": "*"
+}

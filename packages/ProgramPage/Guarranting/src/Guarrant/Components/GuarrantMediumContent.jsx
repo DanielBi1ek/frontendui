@@ -1,4 +1,4 @@
-// packages/ProgramPage/src/program/Components/GuarantorMediumContent.jsx
+// packages/ProgramPage/Program/program/Components/GuarantorMediumContent.jsx
 
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";

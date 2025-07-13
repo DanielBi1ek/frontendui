@@ -18,7 +18,7 @@ We discovered that subjects were available via a list and could be easily iterat
 ---
 
 ### 2. Understanding and Implementing Mutations
-**Date: April 14, 2025**
+**Date: May 5, 2025**
 
 We began implementing mutations, starting with **creating study programs**.
 
@@ -32,7 +32,7 @@ After diving deeper into the structure of GraphQL and understanding how mutation
 ---
 
 ### 3. Creating New Subjects
-**Date: April 16, 2025**
+**Date: May 16, 2025**
 
 We added functionality to create new **subjects**.
 
@@ -45,7 +45,7 @@ Everything worked as expected after adjusting the mutation fields accordingly.
 ---
 
 ### 4. UI Refinement: Buttons in Card Header
-**Date: April 18, 2025**
+**Date: May 17, 2025**
 
 We wanted to display action buttons inside the **header of the card component** for better UI/UX.
 
@@ -58,7 +58,7 @@ After exploring the `CardCapsule` and its internal structure, we successfully in
 ---
 
 ### 5. Displaying and Assigning Supervisors (Garant)
-**Date: April 20, 2025**
+**Date: May 28, 2025**
 
 This was one of the most complex parts of the project.
 
@@ -83,7 +83,7 @@ We reused and customized an existing `UserSearch` component to select users and 
 ---
 
 ### 6. Refactoring Component Structure
-**Date: April 25, 2025**
+**Date: June 5, 2025**
 
 **Problem:**  
 The overall component structure became somewhat chaotic as the project grew.
@@ -94,7 +94,7 @@ We spent time reorganizing the code into proper folders and component groups. Th
 ---
 
 ### 7. Data Loss after Stack Restart
-**Date: April 28, 2025**
+**Date: June 5, 2025**
 
 **Unresolved Problem:**  
 After restarting the development stack (Docker), **supervisors were deleted**, while custom programs and subjects remained.

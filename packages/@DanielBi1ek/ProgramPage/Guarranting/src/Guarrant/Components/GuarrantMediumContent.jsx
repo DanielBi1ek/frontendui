@@ -10,13 +10,33 @@ import {RoleInsertAsyncAction} from "../Queries";
 import {GuarrantButton} from "./GuarrantCUDButton";
 import {Check, PersonFill, Trash} from "react-bootstrap-icons";
 
+
+
 const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
 
 
-export const GuarantMediumContent = ({ program, isEditable }) => {
+/**
+ * Displays and manages the list of guarantors for a program.
+ *
+ * This component renders a list of guarantors, allows adding and removing them if `isEditable` is true,
+ * and provides UI for searching and selecting new guarantors.
+ *
+ * @component
+ * @param {Object} props
+ * @param {Object} props.program - The program entity containing guarantors and groupId.
+ * @param {boolean} props.isEditable - If true, allows editing (add/remove) of guarantors.
+ * @returns {JSX.Element}
+ *
+ * @example
+ * <GuarrantMediumContent program={program} isEditable={true} />
+ */
+export const GuarrantMediumContent = ({ program, isEditable }) => {
+    // State for the currently selected user to add as a guarantor
     const [selectedGuarant, setSelectedGuarant] = useState(null);
+    // State for the list of guarantors
     const [guarantors, setGuarantors] = useState([]);
 
+    // Update guarantors state when program.guarantors changes
     useEffect(() => {
         setGuarantors(
             Array.isArray(program.guarantors)
@@ -27,7 +47,10 @@ export const GuarantMediumContent = ({ program, isEditable }) => {
         );
     }, [program.guarantors]);
 
-
+    /**
+     * Handles adding a new guarantor to the list after successful creation.
+     * @param {Object} result - The result from the add action (not used here).
+     */
     const handleGuarantorAdded = (result) => {
         if (selectedGuarant) {
             setGuarantors(prev => [
@@ -48,7 +71,10 @@ export const GuarantMediumContent = ({ program, isEditable }) => {
         setSelectedGuarant(null);
     };
 
-
+    /**
+     * Handles removing a guarantor from the list.
+     * @param {Object} guarant - The guarantor role to remove.
+     */
     const handleGuarantorDeleted = (guarant) => {
         setGuarantors(prev =>
             prev.filter(g =>
@@ -60,6 +86,7 @@ export const GuarantMediumContent = ({ program, isEditable }) => {
     return (
         <div>
             <h5>Garanti programu:</h5>
+            {/* List of current guarantors */}
             {guarantors.length > 0 ? (
                 guarantors.map((guarantor) => (
                     <div key={guarantor.id} className="guarantor-item"
@@ -70,6 +97,7 @@ export const GuarantMediumContent = ({ program, isEditable }) => {
                                     <PersonFill color="#0d6efd" style={{ marginRight: "0.25rem" }} />
                                     {role.user?.name}
                                     {role.user?.surname ? ` ${role.user.surname}` : ""}
+                                    {/* Delete button for each guarantor role */}
                                     {isEditable && (
                                         <GuarrantButton
                                             operation="D"
@@ -111,6 +139,7 @@ export const GuarantMediumContent = ({ program, isEditable }) => {
                     Žádní garanti programu nejsou přiřazeni.
                 </span>
             )}
+            {/* UI for adding a new guarantor */}
             {isEditable && (
                 <>
                     <UserInputSearch

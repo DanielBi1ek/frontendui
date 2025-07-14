@@ -48,6 +48,7 @@ export default defineConfig({
       "@hrbolek/uoisfrontend-admissions": path.resolve(__dirname, "../../packages/admissions/src"),
       "@hrbolek/uoisfrontend-requests": path.resolve(__dirname, "../../packages/requests/src"),
       "@ProgramPage": path.resolve(__dirname, "../../packages/@DanielBi1ek/ProgramPage/Program/program"),
+      "@SubjectPage": path.resolve(__dirname, "../../packages/subject/src/subject"),
       "@hrbolek/uoisfrontend-zp": path.resolve(__dirname, "../../packages/z_pack/src"),
       "@PrograGuarant": path.resolve(__dirname, "../../packages/ProgramGuarant/Program/guarant"),
     },
@@ -91,6 +92,8 @@ export default defineConfig({
         '!../../packages/requests/**',
         '!../../packages/ProgramPage/**',
         '!../../packages/z_pack/**',
+        '!../../packages/@DanielBi1ek/ProgramPage'
+
       ],
     },
     hmr: {

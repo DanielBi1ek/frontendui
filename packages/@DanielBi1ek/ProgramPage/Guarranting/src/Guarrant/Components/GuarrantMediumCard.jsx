@@ -1,34 +1,30 @@
-
-import {GuarantMediumContent} from "./GuarrantMediumContent";
+import { GuarrantMediumContent } from "./GuarrantMediumContent";
 
 /**
- * A card component that displays detailed content for an program entity.
+ * A card component that displays detailed content for a program entity's guarantors.
  *
- * This component combines `ProgramDetailsCardCapsule` and `ProgramDetailsMediumContent` to create a card layout
- * with a title and medium-level content. The title includes a `PersonFill` icon and a link to
- * the program entity's details, while the body displays serialized details of the entity along
- * with any additional children passed to the component.
+ * This component renders the `GuarrantMediumContent` for a given program, optionally allowing editing.
+ * Any additional children are rendered inside the content area.
  *
  * @component
- * @param {Object} props - The properties for the ProgramDetailsMediumCard component.
- * @param {Object} props.program - The object representing the program entity.
- * @param {string|number} props.program.id - The unique identifier for the program entity.
- * @param {string} props.program.name - The name or label of the program entity.
- * @param {React.ReactNode} [props.children=null] - Additional content to render inside the card body.
+ * @param {Object} props - The properties for the GuarantMediumCard component.
+ * @param {Object} props.program - The program entity object.
+ * @param {string|number} props.program.id - The unique identifier for the program.
+ * @param {string} props.program.name - The name of the program.
+ * @param {boolean} [props.isEditable=false] - If true, enables editing of guarantors.
+ * @param {React.ReactNode} [props.children=null] - Additional content to render inside the card.
  *
- * @returns {JSX.Element} A JSX element combining a card with a title and detailed content.
+ * @returns {JSX.Element} A card displaying the program's guarantors and optional children.
  *
  * @example
- * // Example usage:
- * const programEntity = { id: 123, name: "Sample Entity" };
- *
- * <ProgramDetailsMediumCard program={programEntity}>
- *   <p>Additional details or actions for the entity.</p>
- * </ProgramDetailsMediumCard>
+ * const programEntity = { id: 123, name: "Sample Program" };
+ * <GuarantMediumCard program={programEntity} isEditable={true}>
+ *   <p>Extra content here</p>
+ * </GuarantMediumCard>
  */
-
 export const GuarantMediumCard = ({ program, isEditable, children }) => (
-    <GuarantMediumContent program={program} isEditable={isEditable}>
+    // Render the main content for program guarantors
+    <GuarrantMediumContent program={program} isEditable={isEditable}>
         {children}
-    </GuarantMediumContent>
+    </GuarrantMediumContent>
 );

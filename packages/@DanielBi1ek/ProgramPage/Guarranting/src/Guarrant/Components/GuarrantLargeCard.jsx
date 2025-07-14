@@ -1,18 +1,17 @@
 import Row from "react-bootstrap/Row"
-import { LeftColumn, MiddleColumn,} from "@hrbolek/uoisfrontend-shared"
+import { LeftColumn, MiddleColumn } from "@hrbolek/uoisfrontend-shared"
 import { ProgramCardCapsule } from "../../../../Program/program"
 import { ProgramMediumCard } from "../../../../Program/program"
 
-
 /**
- * A large card component for displaying detailed content and layout for an program entity.
+ * A large card component for displaying detailed content and layout for a program entity.
  *
- * This component wraps an `ProgramDetailsCardCapsule` with a flexible layout that includes multiple
- * columns. It uses a `Row` layout with a `LeftColumn` for displaying an `ProgramDetailsMediumCard`
+ * This component wraps a `ProgramCardCapsule` with a flexible layout that includes multiple
+ * columns. It uses a `Row` layout with a `LeftColumn` for displaying a `ProgramMediumCard`
  * and a `MiddleColumn` for rendering additional children.
  *
  * @component
- * @param {Object} props - The properties for the ProgramDetailsLargeCard component.
+ * @param {Object} props - The properties for the GuarrantLargeCard component.
  * @param {Object} props.program - The object representing the program entity.
  * @param {string|number} props.program.id - The unique identifier for the program entity.
  * @param {string} props.program.name - The name or label of the program entity.
@@ -24,24 +23,22 @@ import { ProgramMediumCard } from "../../../../Program/program"
  * // Example usage:
  * const programEntity = { id: 123, name: "Sample Entity" };
  *
- * <ProgramDetailsLargeCard program={programEntity}>
+ * <GuarrantLargeCard program={programEntity}>
  *   <p>Additional content for the middle column.</p>
- * </ProgramDetailsLargeCard>
+ * </GuarrantLargeCard>
  */
-
-
-export const GuarrantLargeCard = ({program, children}) => {
+export const GuarrantLargeCard = ({ program, children }) => {
     return (
-        <ProgramCardCapsule program={program} >
+        <ProgramCardCapsule program={program}>
             <Row>
+                {/* Left column displays the medium card for the program */}
                 <LeftColumn>
-                    <ProgramMediumCard program={program}/>
+                    <ProgramMediumCard program={program} />
                 </LeftColumn>
+                {/* Middle column displays any additional children */}
                 <MiddleColumn>
                     {children}
-
                 </MiddleColumn>
-
             </Row>
         </ProgramCardCapsule>
     )

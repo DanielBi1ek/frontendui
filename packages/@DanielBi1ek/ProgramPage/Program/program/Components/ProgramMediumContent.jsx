@@ -17,25 +17,28 @@
  * @example
  * // Example usage:
  * const programEntity = { id: 123, name: "Sample Entity" };
- * 
+ *
  * <ProgramDetailsMediumContent program={programEntity}>
  *   <p>Additional information about the entity.</p>
  * </ProgramDetailsMediumContent>
  */
 
-export const ProgramMediumContent = ({ program } ) => {
+export const ProgramMediumContent = ({program}) => {
     return (
         <div className="program-medium-content">
 
             {/* Display program type */}
             {program.type && (
                 <div className="program-type">
-                    <strong>Typ: </strong> {program.type.name}
+                    <strong>Typ: </strong>{program.type.levelType.name}
+                    <br/><strong>Forma: </strong>{program.type.formType.name}
+                    <br/><strong>Délka: </strong>{program.type.levelType.length} let
+                    <br/><strong>Jazyk: </strong>{program.type.languageType.name}
+                    <br/><strong>Titul: </strong>{program.type.titleType.name}
+
                 </div>
 
             )}
-
-            {/* Display program guarantors */}
 
 
         </div>

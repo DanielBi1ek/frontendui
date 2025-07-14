@@ -1,6 +1,6 @@
 import { ProxyLink } from "@hrbolek/uoisfrontend-shared"
 
-export const SubjectURI = '/subjects/view/';
+export const SubjectURI = '/subject/subject/view/';
 
 
 /**

@@ -2,36 +2,30 @@ import {SubjectVectorsAttribute} from "../Vectors";
 import {Link} from "react-router-dom";
 
 /**
- * A component that displays medium-level content for an subject entity.
+ * A component that displays medium-level content for a subject entity.
  *
- * This component renders a label "SubjectMediumContent" followed by a serialized representation of the `subject` object
- * and any additional child content. It is designed to handle and display information about an subject entity object.
+ * This component renders a list of subject links for the provided `subjects` array.
+ * If no subjects are provided, nothing is rendered.
  *
  * @component
  * @param {Object} props - The properties for the SubjectMediumContent component.
- * @param {Object} props.subject - The object representing the subject entity.
- * @param {string|number} props.subject.id - The unique identifier for the subject entity.
- * @param {string} props.subject.name - The name or label of the subject entity.
- * @param {React.ReactNode} [props.children=null] - Additional content to render after the serialized `subject` object.
- *
- * @returns {JSX.Element} A JSX element displaying the entity's details and optional content.
+ * @param {Array<Object>} props.subjects - The array of subject entities to display.
+ * @returns {JSX.Element|null} A list of subject links or null if no subjects.
  *
  * @example
- * // Example usage:
- * const subjectEntity = { id: 123, name: "Sample Entity" };
- * 
- * <SubjectMediumContent subject={subjectEntity}>
- *   <p>Additional information about the entity.</p>
- * </SubjectMediumContent>
+ * const subjects = [{ id: 1, name: "Math" }, { id: 2, name: "Physics" }];
+ * <SubjectMediumContent subjects={subjects} />
  */
 export const SubjectMediumContent = ({ subjects }) => {
+    // If no subjects, render nothing
     if (!subjects || subjects.length === 0) return null;
+    // Render a list of subject links
     return (
         <div className="subject-medium-content">
             <ul>
                 {subjects.map((subject) => (
                     <li key={subject.id}>
-                        <Link to={`/subjects/${subject.id}`}>
+                        <Link to={`/subject/subject/view/${subject.id}`}>
                             {subject.name}
                         </Link>
                     </li>

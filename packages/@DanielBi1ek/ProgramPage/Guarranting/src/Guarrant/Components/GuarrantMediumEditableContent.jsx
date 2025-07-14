@@ -1,29 +1,32 @@
 import { Input } from "@hrbolek/uoisfrontend-shared"
 
 /**
- * A component that displays medium-level content for an program entity.
+ * A component for confirming the addition or removal of a guarantor in a program.
  *
- * This component renders a label "ProgramDetailsMediumContent" followed by a serialized representation of the `program` object
- * and any additional child content. It is designed to handle and display information about an program entity object.
+ * This component displays a confirmation message for either adding or removing a guarantor,
+ * depending on the `operation` prop. It renders the guarantor's name and any additional children,
+ * such as action buttons.
  *
  * @component
- * @param {Object} props - The properties for the ProgramDetailsMediumContent component.
- * @param {Object} props.program - The object representing the program entity.
- * @param {string|number} props.program.id - The unique identifier for the program entity.
- * @param {string} props.program.name - The name or label of the program entity.
- * @param {React.ReactNode} [props.children=null] - Additional content to render after the serialized `program` object.
+ * @param {Object} props - The properties for the GuarrantMediumEditableContent component.
+ * @param {Object} props.guarant - The guarantor entity (with `name` and `surname`).
+ * @param {string} [props.operation="C"] - The operation type: "C" for create/insert, "D" for delete.
+ * @param {function} [props.onChange] - Handler for change events (unused here).
+ * @param {function} [props.onBlur] - Handler for blur events (unused here).
+ * @param {React.ReactNode} [props.children=null] - Additional content to render (e.g., action buttons).
  *
- * @returns {JSX.Element} A JSX element displaying the entity's details and optional content.
+ * @returns {JSX.Element} A confirmation UI for adding or removing a guarantor.
  *
  * @example
- * // Example usage:
- * const programEntity = { id: 123, name: "Sample Entity" };
- *
- * <ProgramDetailsMediumContent program={programEntity}>
- *   <p>Additional information about the entity.</p>
- * </ProgramDetailsMediumContent>
+ * <GuarrantMediumEditableContent
+ *   guarant={{ name: "John", surname: "Doe" }}
+ *   operation="D"
+ * >
+ *   <button>Confirm</button>
+ * </GuarrantMediumEditableContent>
  */
 const uuid = () => crypto.randomUUID();
+
 export const GuarrantMediumEditableContent = ({
                                                   guarant,
                                                   operation = "C", // "C" for create/insert, "D" for delete
@@ -31,6 +34,7 @@ export const GuarrantMediumEditableContent = ({
                                                   onBlur = (e) => null,
                                                   children
                                               }) => {
+    // Render confirmation for delete operation
     if (operation === "D") {
         return (
             <>
@@ -44,7 +48,7 @@ export const GuarrantMediumEditableContent = ({
             </>
         );
     }
-    // Default: Insert
+    // Default: confirmation for insert operation
     return (
         <>
             <div>

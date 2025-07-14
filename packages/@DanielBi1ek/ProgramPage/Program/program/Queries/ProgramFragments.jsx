@@ -41,9 +41,23 @@ export const ProgramMediumFragment = createQueryStrLazy(
 fragment ProgramMedium on ProgramGQLModel {
 __typename
   ...ProgramLink
+ 
     type {
       name
-    }
+      levelType {
+        name
+        length
+      }
+      formType {
+        name
+      }
+      languageType {
+        name
+        }
+        titleType {
+            name
+            }
+      }
     groupId
     guarantors {
       id

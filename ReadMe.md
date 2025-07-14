@@ -1,8 +1,11 @@
 # Project Timeline and Problem Resolution
 
 This document outlines the development timeline, problems encountered, discoveries made, and solutions implemented during the creation of the **Study Program Page (Supervisor View)** project.
-URL: http://localhost:5173/programs/program/edit/:id/   (edit)
-URL: http://localhost:5173/programs/program/view/:id/    (view)
+
+URL  (edit): **http://localhost:5173/programs/program/edit/:id/**  
+
+URL (view) : **http://localhost:5173/programs/program/view/:id/**   
+ 
 
 ---
 

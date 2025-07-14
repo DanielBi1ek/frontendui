@@ -13,7 +13,7 @@ jobs:
     # Všechny kroky běží už uvnitř cílové složky
     defaults:
       run:
-        working-directory: packages/uoisfronted-programs
+        working-directory: packages/uoisfrontend-programs
 
     steps:
       - name: Checkout repo

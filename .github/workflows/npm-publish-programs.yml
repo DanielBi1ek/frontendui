@@ -1,0 +1,35 @@
+name: Publish @bravo4b9/uoisfronted-programs
+
+# Spustí se při pushi tagu „my-lib-vX.Y.Z“
+on:
+  push:
+    tags:
+      - 'my-lib-v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    # Všechny kroky běží už uvnitř cílové složky
+    defaults:
+      run:
+        working-directory: packages/uoisfronted-programs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install deps (workspace)
+        run: npm ci --workspaces --include-workspace-root
+
+      - name: Build + publish
+        run: npm publish --workspace my-lib --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

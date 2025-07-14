@@ -31,7 +31,8 @@ export const SubjectCardCapsule = ({
                                        children,
                                        isEditable,
                                        title = (
-                                           <div className="d-flex justify-content-between align-items-center" style={{width: "100%"}}>
+                                           <div className="d-flex justify-content-between align-items-center"
+                                                style={{width: "100%"}}>
             <span style={{display: "flex", alignItems: "center", gap: "1rem"}}>
                 <BackpackFill color="#0c6ffd"/>
                 <span style={{

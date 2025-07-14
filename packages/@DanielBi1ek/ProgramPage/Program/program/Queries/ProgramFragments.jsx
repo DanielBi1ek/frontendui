@@ -75,6 +75,7 @@ __typename
     subjects {
         id
         name
+        lastchange
         }
         
   }

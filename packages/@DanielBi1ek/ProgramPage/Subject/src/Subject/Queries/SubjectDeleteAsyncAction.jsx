@@ -1,35 +1,24 @@
 import { createAsyncGraphQLAction, createQueryStrLazy } from "@hrbolek/uoisfrontend-gql-shared";
-const SubjectDeleteErrorFragment = `
-fragment SubjectDeleteError on SubjectGQLModelDeleteError {
-  failed
-  msg
-  input
-  Entity {
-    id
-    name
-    lastchange
-  }
-}
-`;
+import {SubjectLargeFragment} from "./SubjectFragments";
 
 const SubjectDeleteMutation = createQueryStrLazy(
     `
-${SubjectDeleteErrorFragment}
+
 mutation SubjectDeleteMutation($id: UUID!, $lastchange: DateTime!) {
   result: subjectDelete(
     subject: {id: $id, lastchange: $lastchange}
   ) {
     ... on SubjectGQLModelDeleteError {
-      ...SubjectDeleteError
-    }
-    ... on SubjectGQLModel {
-      id
-      name
-      lastchange
+      failed
+      msg
+      input
+      Entity {
+        ...SubjectLarge
+      }
     }
   }
 }
-`
-);
+`,
+    SubjectLargeFragment)
 
 export const SubjectDeleteAsyncAction = createAsyncGraphQLAction(SubjectDeleteMutation)

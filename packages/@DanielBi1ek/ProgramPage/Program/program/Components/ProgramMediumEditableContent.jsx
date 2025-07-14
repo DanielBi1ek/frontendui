@@ -23,12 +23,12 @@ import { Input } from "@hrbolek/uoisfrontend-shared"
  *   <p>Additional information about the entity.</p>
  * </ProgramDetailsMediumContent>
  */
-const uuid = () => crypto.randomUUID();
 export const ProgramMediumEditableContent = ({program, onChange=(e)=>null, onBlur=(e)=>null, children}) => {
     return (
         <>
             <Input id={"name"} label={"Název"} className="form-control" defaultValue={program?.name|| "Název"} onChange={onChange} onBlur={onBlur} />
             <Input id={"name_en"} label={"Anglický název"} className="form-control" defaultValue={program?.nameEn|| "Anglický název"} onChange={onChange} onBlur={onBlur} />
+
             {children}
         </>
     )

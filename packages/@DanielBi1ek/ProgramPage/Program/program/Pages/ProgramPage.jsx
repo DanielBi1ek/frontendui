@@ -7,114 +7,84 @@ import {ProgramReadAsyncAction, ProgramListAsyncAction} from "../Queries"
 import {ProgramPageNavbar} from "./ProgramPageNavbar"
 import {SubjectMediumContent, SubjectCardCapsule} from "../../../Subject/src/Subject";
 
-
-
 /**
- * A page content component for displaying detailed information about an program entity.
- *
- * This component utilizes `ProgramDetailsLargeCard` to create a structured layout and displays
- * the serialized representation of the `program` object within the card's content.
+ * Renders the main content for a program page, including the navbar, program card, and subjects.
  *
  * @component
- * @param {Object} props - The properties for the ProgramPageContent component.
- * @param {Object} props.program - The object representing the program entity.
- * @param {string|number} props.program.id - The unique identifier for the program entity.
- * @param {string} props.program.name - The name or label of the program entity.
- *
- * @returns {JSX.Element} A JSX element rendering the page content for an program entity.
- *
- * @example
- * // Example usage:
- * const programEntity = { id: 123, name: "Sample Entity" };
- *
- * <ProgramPageContent program={programEntity} />
+ * @param {Object} props - Component props.
+ * @param {Object} props.program - The program entity object.
+ * @param {boolean} props.isEditable - If true, enables editing features.
+ * @param {Array} [props.subjects] - Optional array of subject entities.
+ * @param {Array|string} [props.groupId] - Optional group ID(s).
+ * @returns {JSX.Element}
  */
-
-// garance programu group id : b1bedec8-931f-11ed-9b95-0242ac110002
-    // garant role id:5f0c247e-931f-11ed-9b95-0242ac110002
-    //studijní skupina id: cd49e157-610c-11ed-9312-001a7dda7110
-//const GUARANTOR_ROLE_ID = "5f0c247e-931f-11ed-9b95-0242ac110002";
-
 const ProgramPageContent = ({program, isEditable, subjects, groupId = []}) => {
-
     return (
         <>
+            {/* Navigation bar for the program */}
             <ProgramPageNavbar program={program}/>
-            <ProgramLargeCard program={program} isEditable={isEditable}>
-            </ProgramLargeCard>
-
+            {/* Main program card with details */}
+            <ProgramLargeCard program={program} isEditable={isEditable} />
+            {/* Capsule card for subjects related to the program */}
             <SubjectCardCapsule
                 isEditable={isEditable}
-                subject={{ programId: program.id }} // Ensure programId is always present
+                subject={{ programId: program.id }} // Ensures programId is always present
             >
-                <SubjectMediumContent subjects={program.subjects} />
+                <SubjectMediumContent subjects={program.subjects} isEditable={isEditable} />
             </SubjectCardCapsule>
-
-
-
-
-
-
-
         </>
     );
 };
 
 /**
- * A lazy-loading component for displaying content of an program entity.
+ * Handles lazy loading and fetching of program data, displaying loading and error states.
  *
- * This component is created using `createLazyComponent` and wraps `ProgramPageContent` to provide
- * automatic data fetching for the `program` entity. It uses the `ProgramDetailsReadAsyncAction` to fetch
- * the entity data and dynamically injects it into the wrapped component as the `program` prop.
- *
- * @constant
- * @type {React.Component}
- *
- * @param {Object} props - The props for the lazy-loading component.
- * @param {string|number} props.program - The identifier of the program entity to fetch and display.
- *
- * @returns {JSX.Element} A component that fetches the `program` entity data and displays it
- * using `ProgramPageContent`, or shows loading and error states as appropriate.
- *
- * @example
- * // Example usage:
- * const programId = "12345";
- *
- * <ProgramPageContentLazy program={programId} />
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Object} props.program - The program entity or identifier.
+ * @param {boolean} props.isEditable - If true, enables editing features.
+ * @returns {JSX.Element}
  */
-
-
 const ProgramPageContentLazy = ({program, isEditable}) => {
+    // Fetch program data using async action
     const {error, loading, entity, fetch} = useAsyncAction(
         program?.id ? ProgramReadAsyncAction : ProgramListAsyncAction,
-        program?.id ? {id: program.id} : {} // Always pass an object
+        program?.id ? {id: program.id} : {}
     );
 
-
+    // Delayer for debouncing fetches
     const [delayer] = useState(() => CreateDelayer());
 
+    /**
+     * Handles input change events, triggers a delayed fetch.
+     * @param {Event} e - The change event.
+     */
     const handleChange = async (e) => {
         const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
+        await delayer(() => fetch(data));
     };
 
+    /**
+     * Handles input blur events, triggers a delayed fetch.
+     * @param {Event} e - The blur event.
+     */
     const handleBlur = async (e) => {
         const data = e.target.value;
-        const serverResponse = await delayer(() => fetch(data));
+        await delayer(() => fetch(data));
     };
 
     return (
         <>
-
             {loading && <LoadingSpinner/>}
             {error && <ErrorHandler errors={error}/>}
+            {/* Render single program view */}
             {entity && program?.id && (
                 <ProgramPageContent program={entity} onChange={handleChange} onBlur={handleBlur}
                                     isEditable={isEditable}/>
             )}
+            {/* Render list of programs if no ID is provided DISCONTINUED*/}
             {entity && !program?.id && (
                 <div>
-                    ahoj
                     {entity.result.map((program) => (
                         <ProgramLargeCard key={program.id} program={program}/>
                     ))}
@@ -123,21 +93,15 @@ const ProgramPageContentLazy = ({program, isEditable}) => {
         </>
     );
 };
+
 /**
- * A page component for displaying lazy-loaded content of an program entity.
- *
- * This component extracts the `id` parameter from the route using `useParams`,
- * constructs an `program` object, and passes it to the `ProgramPageContentLazy` component.
- * The `ProgramPageContentLazy` component handles the lazy-loading and rendering of the entity's content.
+ * Top-level page component for displaying a program entity.
+ * Extracts the program ID from the route and passes it to the lazy loader.
  *
  * @component
- * @returns {JSX.Element} The rendered page component displaying the lazy-loaded content for the program entity.
- *
- * @example
- * // Example route setup:
- * <Route path="/program/:id" element={<ProgramPage />} />
- *
- * // Navigating to "/program/12345" will render the page for the program entity with ID 12345.
+ * @param {Object} props - Component props.
+ * @param {boolean} props.isEditable - If true, enables editing features.
+ * @returns {JSX.Element}
  */
 export const ProgramPage = ({isEditable}) => {
     const {id} = useParams(); // Get the `id` from the URL

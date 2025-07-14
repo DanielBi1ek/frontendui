@@ -30,7 +30,7 @@ export const SubjectMediumCard = ({subject, children}) => {
     // Render the subject card with a title and medium-level content
     return (
         <SubjectCardCapsule title={<><BackpackFill color={"#0c6ffd"}/> <SubjectLink subject={subject} /></>}>
-            <SubjectMediumContent subject={subject}>
+            <SubjectMediumContent subject={subject} isEditable={true}>
                 {children}
             </SubjectMediumContent>
         </SubjectCardCapsule>
